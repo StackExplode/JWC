@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -20,29 +21,38 @@ namespace JWCControlLib
    
     public class JWCControl :  System.Windows.Controls.UserControl
     {
-        public event Action<object> OnMoved;
-        public event Action<object> OnGotFocus;
-        public event Action<object> OnLostFocus;
+        
 
         private bool Mousedown,_mousedd=false;
         private double CurX = 0;
         private double CurY = 0;
-        private bool _selecting = false;
-
-        protected Border _selector;
+        protected bool _selecting = false;
+        private Border _selector { get; set; }
 
         public new Panel Parent { set; get; }
         public bool IsEditMode { get; set; }
+
+        public new event Action<object> OnMoved;
+        public new event Action<object> OnGotFocus;
+        public new event Action<object> OnLostFocus;
+
+
         
         public JWCControl()
         {
             IsEditMode = false;
-            this.PreviewMouseLeftButtonDown += JWCControl_MouseRightButtonDown;
-            this.PreviewMouseLeftButtonUp += JWCControl_MouseRightButtonUp;
-            this.PreviewMouseMove += JWCControl_MouseMove;
+            
             this.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
             this.VerticalAlignment = System.Windows.VerticalAlignment.Top;
             
+        }
+
+        protected void BindSelector(Border bd)
+        {
+            _selector = bd;
+            this.PreviewMouseLeftButtonDown += JWCControl_MouseRightButtonDown;
+            this.PreviewMouseLeftButtonUp += JWCControl_MouseRightButtonUp;
+            this.PreviewMouseMove += JWCControl_MouseMove;
         }
 
 
@@ -77,8 +87,9 @@ namespace JWCControlLib
                 if (Attribute.IsDefined(pi, typeof(OutputableAttribute)))
                 {
                     object val = null;
-                    if(dic.TryGetValue(pi.Name,out val))
+                    if(dic.ContainsKey(pi.Name))
                     {
+                        val = dic[pi.Name];
                         if (Attribute.IsDefined(pi, typeof(RedirectGSAttribute)))
                         {
                             object[] attrs = pi.GetCustomAttributes(typeof(RedirectGSAttribute), true);
@@ -124,6 +135,8 @@ namespace JWCControlLib
 
 
 
+
+
         public void ClearEditorEvents()
         {
             foreach (Delegate d in OnMoved.GetInvocationList())
@@ -157,6 +170,9 @@ namespace JWCControlLib
 
         protected virtual void JWCControl_MouseMove(object sender, MouseEventArgs e)
         {
+            if (!IsEditMode)
+                return;
+
             e.Handled = true;
 
             if (Mousedown)
@@ -181,9 +197,10 @@ namespace JWCControlLib
 
         protected virtual void JWCControl_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
-            e.Handled = true;
+            
             if (!IsEditMode)
                 return;
+            e.Handled = true;
             if(Mousedown)
             {
                 Mousedown = false;
@@ -200,9 +217,10 @@ namespace JWCControlLib
         
         protected virtual void JWCControl_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
-           e.Handled = true;
+           
             if (!IsEditMode)
                 return;
+            e.Handled = true;
             if (!_selecting)
             {
                 GetFocus();
@@ -218,11 +236,12 @@ namespace JWCControlLib
                 this.Cursor = Cursors.SizeAll;
             }
             
+            
         }
     }
 
     [Serializable]
-    public class JControlOutputData:Dictionary<string,object>
+    public class JControlOutputData : Hashtable
     {
         public JControlOutputData() : base() { }
         protected JControlOutputData(SerializationInfo info, StreamingContext context): base(info, context) { }

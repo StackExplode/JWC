@@ -8,7 +8,11 @@
              mc:Ignorable="d" 
              >
     <Grid x:Name="grid1" Background="Transparent">
-        <Border Panel.ZIndex="9999" x:Name="board1" Width="150" Height="75" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
-        <Image x:Name="img1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  ScrollViewer.VerticalScrollBarVisibility="Disabled" Stretch="Fill"/>
+        <Border Panel.ZIndex="9999" x:Name="board1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+        <!--
+        <TextBox x:Name="txt1" Panel.ZIndex="10000" HorizontalAlignment="Stretch" VerticalAlignment="Center"/>
+        -->
+        
+        <Image x:Name="img1" Panel.ZIndex="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  ScrollViewer.VerticalScrollBarVisibility="Disabled" Stretch="Fill"/>
     </Grid>
 </local:JWCControl>

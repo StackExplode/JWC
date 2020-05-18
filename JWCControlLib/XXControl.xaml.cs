@@ -25,9 +25,11 @@ namespace JWCControlLib
         public XXControl():base()
         {
             InitializeComponent();
-            base._selector = this.board1;
+            base.BindSelector(board1);
 
         }
+
+
 
         [Outputable]
         [RedirectGS("GSR_ForeColor")]

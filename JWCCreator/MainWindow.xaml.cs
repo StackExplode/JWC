@@ -38,6 +38,7 @@ namespace JWCCreator
         private void JWCCMainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             image1.Source = Properties.Resources.pixiv21596.ToBitMapSource();
+            JWCControlFactory.LoadLibs(AppDomain.CurrentDomain.BaseDirectory + "\\Controls");
             
         }
 
@@ -176,7 +177,19 @@ namespace JWCCreator
             }
             else if ((sender as RadioButton).Tag.ToString() == "5")
             {
-                
+
+                JWCControl xx = JWCControlFactory.CreateInstance("NanjingControls.DunWei");
+                xx.Parent = grid_main;
+                xx.Margin = new Thickness(0, 0, 0, 0);
+                xx.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
+                xx.VerticalAlignment = System.Windows.VerticalAlignment.Top;
+                //xx.ShowPic = true;
+                xx.Width = 350;
+                xx.Height = 350;
+                xx.IsEditMode = true;
+                xx.ZIndex = 6;
+                xx.OnGotFocus += xx_OnGotFocus;
+                xx.Show();
             }
         }
 
