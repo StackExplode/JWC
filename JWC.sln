@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JWCControlLib", "JWCControl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JWCCommunicationLib", "JWCCommunicationLib\JWCCommunicationLib.csproj", "{95750721-33F7-49C7-BCB9-E9239AC1DADC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NanjingControls", "NanjingControls\NanjingControls.csproj", "{4F964BB9-689A-4FFF-A403-FD5F4BE1F563}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{95750721-33F7-49C7-BCB9-E9239AC1DADC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{95750721-33F7-49C7-BCB9-E9239AC1DADC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{95750721-33F7-49C7-BCB9-E9239AC1DADC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F964BB9-689A-4FFF-A403-FD5F4BE1F563}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F964BB9-689A-4FFF-A403-FD5F4BE1F563}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F964BB9-689A-4FFF-A403-FD5F4BE1F563}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F964BB9-689A-4FFF-A403-FD5F4BE1F563}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

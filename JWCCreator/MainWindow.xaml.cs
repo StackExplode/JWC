@@ -174,6 +174,10 @@ namespace JWCCreator
                 xx.OnGotFocus += xx_OnGotFocus;
                 xx.Show();
             }
+            else if ((sender as RadioButton).Tag.ToString() == "5")
+            {
+                
+            }
         }
 
         void xx_MouseDoubleClick(object sender, MouseButtonEventArgs e)

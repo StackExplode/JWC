@@ -26,6 +26,7 @@ namespace JWCControlLib
         {
             InitializeComponent();
             base._selector = this.board1;
+
         }
 
         [Outputable]
