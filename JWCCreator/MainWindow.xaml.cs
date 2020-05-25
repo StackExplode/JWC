@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using JWCControlLib;
+using System.Collections.ObjectModel;
 
 namespace JWCCreator
 {
@@ -191,7 +192,14 @@ namespace JWCCreator
                 xx.OnGotFocus += xx_OnGotFocus;
                 xx.Show();
             }
+            else if ((sender as RadioButton).Tag.ToString() == "6")
+            {
+                
+
+            }
         }
+
+      
 
         void xx_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {

@@ -46,7 +46,7 @@ namespace NanjingControls
         public DunWei():base()
         {
             InitializeComponent();
-            base.BindSelector(board1);
+            base.BindMainGrid(grid1);
             UsingBitmap = new BitmapImage(new Uri("file:///" + GetPic_Debug(true)));
             FreeBitmap = new BitmapImage(new Uri("file:///" + GetPic_Debug(false)));
             IsUing = true;

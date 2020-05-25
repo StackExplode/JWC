@@ -28,7 +28,11 @@ namespace JWCControlLib
         Text,
         Boolean,
         DropDown,
-        Dialog
+        Dialog,
+        DialogWithText,
+        Flag,
+        Multi,
+        Other
     }
 
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
@@ -37,10 +41,12 @@ namespace JWCControlLib
         public string Describe = "";
         public CreatorPropType ShowType = CreatorPropType.Text;
         public object Param;
-        public ProplDiscribeAttribute(CreatorPropType stype, string desc,object pa)
+        public string FriendlyName = "";
+        public ProplDiscribeAttribute(CreatorPropType stype,string fname, string desc="无帮助文本",object pa=null)
         {
             ShowType = stype;
             Describe = desc;
+            FriendlyName = fname;
             Param = pa;
         }
     }

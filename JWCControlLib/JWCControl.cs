@@ -21,14 +21,16 @@ namespace JWCControlLib
    
     public class JWCControl :  System.Windows.Controls.UserControl
     {
-        
+        internal enum MouseState { Up,MoveDown,ResizeDown}
 
-        private bool Mousedown,_mousedd=false;
+        private MouseState Mousedown;
+        bool _mouseforresize = false;
+        private ThumbAdder TMA;
         private double CurX = 0;
         private double CurY = 0;
         protected bool _selecting = false;
         private Border _selector { get; set; }
-
+        protected Grid _maingrd { get; set; }
         public new Panel Parent { set; get; }
         public bool IsEditMode { get; set; }
 
@@ -44,15 +46,23 @@ namespace JWCControlLib
             
             this.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
             this.VerticalAlignment = System.Windows.VerticalAlignment.Top;
-            
+            this.PreviewMouseLeftButtonDown += JWCControl_MouseLeftButtonDown;
         }
 
+        [Obsolete]
         protected void BindSelector(Border bd)
         {
             _selector = bd;
-            this.PreviewMouseLeftButtonDown += JWCControl_MouseRightButtonDown;
-            this.PreviewMouseLeftButtonUp += JWCControl_MouseRightButtonUp;
-            this.PreviewMouseMove += JWCControl_MouseMove;
+            //this.PreviewMouseLeftButtonDown += JWCControl_MouseLeftButtonDown;
+            //this.PreviewMouseLeftButtonUp += JWCControl_MouseRightButtonUp;
+            //this.PreviewMouseMove += JWCControl_MouseMove;
+        }
+
+        protected void BindMainGrid(Grid grd)
+        {
+            _maingrd = grd;
+            TMA = new ThumbAdder(this, grd);
+            TMA.InitThumbs();
         }
 
 
@@ -133,7 +143,18 @@ namespace JWCControlLib
             }
         }
 
-
+        [Outputable]
+        public new string Name
+        {
+            get { return base.Name; }
+            set { base.Name = value; }
+        }
+        [Outputable]
+        public int ID
+        {
+            get;
+            set;
+        }
 
 
 
@@ -147,7 +168,13 @@ namespace JWCControlLib
 
         public void GetFocus()
         {
-            _selector.Background = new SolidColorBrush(Color.FromArgb(90, 0, 0, 255));
+            //Border bd = _selector;
+            //_selector.Background = new SolidColorBrush(Color.FromArgb(90, 0, 0, 255));
+            //bd.BorderBrush = new SolidColorBrush(Colors.Red);
+            //bd.BorderThickness = new Thickness(2);
+
+            TMA.AppendMoveThumb();
+
             _selecting = true;
  
             if (this.OnGotFocus != null)
@@ -156,7 +183,11 @@ namespace JWCControlLib
 
         public void LoseFocus()
         {
-            _selector.Background = null;
+            //_selector.Background = null;
+            //_selector.BorderBrush = null;
+
+            TMA.RemoveMoveThumb();
+
             _selecting = false;
             if (this.OnLostFocus != null)
                 this.OnLostFocus(this);
@@ -170,12 +201,12 @@ namespace JWCControlLib
 
         protected virtual void JWCControl_MouseMove(object sender, MouseEventArgs e)
         {
-            if (!IsEditMode)
+            if (!IsEditMode || !_selecting)
                 return;
 
             e.Handled = true;
 
-            if (Mousedown)
+            if (Mousedown == MouseState.MoveDown)
             {
                 // 获取当前屏幕的光标坐标
                 //Point pTemp = new Point(Cursor.Position.X, Cursor.Position.Y);
@@ -192,6 +223,30 @@ namespace JWCControlLib
                 control.Margin = new Thickness(diff_x, diff_y, 0, 0);
  
             }
+            else if(Mousedown == MouseState.ResizeDown)
+            {
+                this.CaptureMouse();
+                Point pTemp = Mouse.GetPosition(Parent);
+                double diff_x = pTemp.X - CurX;
+                double diff_y = pTemp.Y - CurY;
+                if(this.Width + diff_x > 10)
+                    this.Width += diff_x;
+                if (this.Height + diff_y > 10)
+                    this.Height += diff_y;
+            }
+            else
+            {
+                //this.CaptureMouse();
+                Point pTemp = e.GetPosition(this);
+                if (pTemp.X > 0 && pTemp.X < 4 && pTemp.Y > 0 && pTemp.Y < 4)
+                {
+                    _mouseforresize = true;
+                    ((FrameworkElement)this).Cursor = Cursors.SizeNWSE;
+                }
+                else
+                    _mouseforresize = false;
+                //this.ReleaseMouseCapture();
+            }
             
         }
 
@@ -201,9 +256,9 @@ namespace JWCControlLib
             if (!IsEditMode)
                 return;
             e.Handled = true;
-            if(Mousedown)
+            if(Mousedown != MouseState.Up)
             {
-                Mousedown = false;
+                Mousedown = MouseState.Up;
                 if (sender is FrameworkElement)
                 {
                     ((FrameworkElement)this).Cursor = Cursors.Arrow;
@@ -215,26 +270,37 @@ namespace JWCControlLib
         }
 
         
-        protected virtual void JWCControl_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        protected virtual void JWCControl_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
            
             if (!IsEditMode)
                 return;
-            e.Handled = true;
+            
             if (!_selecting)
             {
                 GetFocus();
+                e.Handled = true;
                 return;
             }
+               
+            //if(_selecting)
+            //{
+            //    Point pt = Mouse.GetPosition((FrameworkElement)this);
+            //    CurX = pt.X;
+            //    CurY = pt.Y;
+            //    if (_mouseforresize)
+            //    {
+            //        Mousedown = MouseState.ResizeDown;
+
+            //    }
+            //    else
+            //    {
+            //        this.Cursor = Cursors.SizeAll;
+            //        Mousedown = MouseState.MoveDown;
+            //    }
+                    
                 
-            if(_selecting)
-            {
-                Point pt = Mouse.GetPosition((FrameworkElement)this);
-                CurX = pt.X;
-                CurY = pt.Y;
-                Mousedown = true;
-                this.Cursor = Cursors.SizeAll;
-            }
+            //}
             
             
         }

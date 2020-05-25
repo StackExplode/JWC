@@ -5,8 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:JWCControlLib"
              mc:Ignorable="d" d:DesignWidth="125" Height="75">
-    <Grid x:Name="grid1" Background="Transparent">
-        <Border Panel.ZIndex="9999" x:Name="board1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+  
+    <Grid  x:Name="grid1"   Background="Transparent">
+        <!--<Thumb x:Name="resizeThumb" Height="10" Width="10"
+         HorizontalAlignment="Right" VerticalAlignment="Bottom"
+         Margin="0,0,-15,-10" DragDelta="Resize" />-->
+        
+        <!--<Border Margin="-2" Panel.ZIndex="9999" x:Name="board1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />-->
         <Image x:Name="img1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  ScrollViewer.VerticalScrollBarVisibility="Disabled" Stretch="Fill"/>
     </Grid>
 </local:JWCControl>

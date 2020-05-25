@@ -6,9 +6,11 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Markup;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -25,7 +27,8 @@ namespace JWCControlLib
         public XXControl():base()
         {
             InitializeComponent();
-            base.BindSelector(board1);
+            //base.BindSelector(board1);
+            base.BindMainGrid(grid1);
 
         }
 
@@ -74,5 +77,13 @@ namespace JWCControlLib
                 }
             }
         }
+
+        //private void Resize(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+        //{
+        //    if (this.Width+ e.HorizontalChange > 10)
+        //        this.Width += e.HorizontalChange;
+        //    if (this.Height + e.VerticalChange > 10)
+        //        this.Height += e.VerticalChange;
+        //}
     }
 }
