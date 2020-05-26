@@ -29,6 +29,8 @@ namespace JWCControlLib
         public Size ResizerSize { get; set; }
         public double ResizerThickness { get; set; }
 
+        public event DragCompletedEventHandler OnDragFinished;
+
         public ThumbAdder(UserControl ctrl, Grid grd)
         {
             _MainGrid = grd;
@@ -69,13 +71,11 @@ namespace JWCControlLib
                 //    this.Width += e.HorizontalChange;
                 //if (this.Height + e.VerticalChange > 10)
                 //    this.Height += e.VerticalChange;
-
                 double x = _Ctrl.Margin.Left + e.HorizontalChange;
                 double y = _Ctrl.Margin.Top + e.VerticalChange;
                 _Ctrl.Margin = new Thickness(x, y, 0, 0);
+                
             };
-
-            
         }
 
         private void InitSize_ES()
@@ -270,6 +270,7 @@ namespace JWCControlLib
             if(move)
             {
                 InitMove();
+                _TmbMove.DragCompleted += (s, e) => { OnDragFinished(s, e); };
             }
             if (resize)
             {
@@ -281,6 +282,14 @@ namespace JWCControlLib
                 InitSize_EN();
                 InitSize_WS();
                 InitSize_WN();
+                _TmbSize_S.DragCompleted += (s, e) => { OnDragFinished(s, e); };
+                _TmbSize_N.DragCompleted += (s, e) => { OnDragFinished(s, e); };
+                _TmbSize_W.DragCompleted += (s, e) => { OnDragFinished(s, e); };
+                _TmbSize_E.DragCompleted += (s, e) => { OnDragFinished(s, e); };
+                _TmbSize_ES.DragCompleted += (s, e) => { OnDragFinished(s, e); };
+                _TmbSize_EN.DragCompleted += (s, e) => { OnDragFinished(s, e); };
+                _TmbSize_WS.DragCompleted += (s, e) => { OnDragFinished(s, e); };
+                _TmbSize_WN.DragCompleted += (s, e) => { OnDragFinished(s, e); };
             }
         }
 

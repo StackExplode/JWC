@@ -17,6 +17,7 @@ namespace JWCControlLib
     public class RedirectGSAttribute:Attribute
     {
         public string Fun { get; set; }
+        //public Func<object, bool, object,object> Func;
         public RedirectGSAttribute(string fun)
         {
             Fun = fun;
@@ -36,13 +37,13 @@ namespace JWCControlLib
     }
 
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class ProplDiscribeAttribute:Attribute
+    public class PropDiscribeAttribute:Attribute
     {
         public string Describe = "";
         public CreatorPropType ShowType = CreatorPropType.Text;
         public object Param;
         public string FriendlyName = "";
-        public ProplDiscribeAttribute(CreatorPropType stype,string fname, string desc="无帮助文本",object pa=null)
+        public PropDiscribeAttribute(CreatorPropType stype,string fname, string desc="无帮助文本",object pa=null)
         {
             ShowType = stype;
             Describe = desc;

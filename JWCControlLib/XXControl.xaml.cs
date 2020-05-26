@@ -41,18 +41,19 @@ namespace JWCControlLib
             set { grid1.Background = new SolidColorBrush(value); } 
         }
 
-        private object GSR_ForeColor(bool isset,object val = null)
+        private static object GSR_ForeColor(object obj,bool isset,object val = null)
         {
+            XXControl me = obj as XXControl;
             if(isset)
             {
                 var mth = Regex.Match((string)val, "([0-9]{1,3}),([0-9]{1,3}),([0-9]{1,3}),([0-9]{1,3})");
                 var rst = mth.Groups;
-                this.ForeColor = Color.FromArgb(byte.Parse(rst[4].Value), byte.Parse(rst[1].Value), byte.Parse(rst[2].Value), byte.Parse(rst[3].Value));
+                me.ForeColor = Color.FromArgb(byte.Parse(rst[4].Value), byte.Parse(rst[1].Value), byte.Parse(rst[2].Value), byte.Parse(rst[3].Value));
                 return null;
             }
             else
             {
-                Color cl = this.ForeColor;
+                Color cl = me.ForeColor;
                 return string.Format("{0},{1},{2},{3}", cl.R, cl.G, cl.B, cl.A);
             }
         }

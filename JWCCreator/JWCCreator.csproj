@@ -60,8 +60,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="IPropItem.cs" />
     <Compile Include="JWCControlFactory.cs" />
+    <Compile Include="PropItemFactory.cs" />
+    <Compile Include="PropManager.cs" />
     <Compile Include="Stage.cs" />
+    <Compile Include="TextPropItem.cs" />
     <Compile Include="UtilExtends.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -93,6 +97,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -101,13 +106,14 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\pixiv21596.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\JWCControlLib\JWCControlLib.csproj">
       <Project>{3bd53ed8-0ec5-4f5d-b61b-44ff546e8d13}</Project>
       <Name>JWCControlLib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\Grab.cur" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

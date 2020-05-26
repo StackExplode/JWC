@@ -8,6 +8,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -34,10 +35,21 @@ namespace JWCControlLib
         public new Panel Parent { set; get; }
         public bool IsEditMode { get; set; }
 
-        public new event Action<object> OnMoved;
+        public event Action<object,DragCompletedEventArgs> OnMovedOrResized;
         public new event Action<object> OnGotFocus;
         public new event Action<object> OnLostFocus;
 
+        [PropDiscribe(CreatorPropType.Text,"Name","控件的名称，其不能以数字开头且不包含特殊符号，一般它是唯一的")]
+        [Outputable]
+        public new string Name
+        {
+            get { return base.Name; }
+            set { base.Name = value; }
+        }
+
+        [PropDiscribe(CreatorPropType.Text, "ID", "在参与通信时的唯一标识符，其只能由数字组成")]
+        [Outputable]
+        public int ID{ get; set; }
 
         
         public JWCControl()
@@ -63,8 +75,40 @@ namespace JWCControlLib
             _maingrd = grd;
             TMA = new ThumbAdder(this, grd);
             TMA.InitThumbs();
+            TMA.OnDragFinished += (s, e) =>
+                {
+                    if (OnMovedOrResized != null)
+                        OnMovedOrResized(this, e);
+                };
         }
 
+
+        public void SetProp(PropertyInfo pi, object val)
+        {
+            if (Attribute.IsDefined(pi, typeof(RedirectGSAttribute)))
+            {
+                object[] attrs = pi.GetCustomAttributes(typeof(RedirectGSAttribute), true);
+                RedirectGSAttribute attr = (RedirectGSAttribute)attrs[0];
+                var meth = this.GetType().GetMethod(attr.Fun, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                meth.Invoke(this, new object[] { true, val });
+            }
+            else
+                pi.SetValue(this, val, null);
+        }
+
+        public object GetProp(PropertyInfo pi)
+        {
+            if (Attribute.IsDefined(pi, typeof(RedirectGSAttribute)))
+            {
+                object[] attrs = pi.GetCustomAttributes(typeof(RedirectGSAttribute), true);
+                RedirectGSAttribute attr = (RedirectGSAttribute)attrs[0];
+                var meth = this.GetType().GetMethod(attr.Fun, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                object val = meth.Invoke(this, new object[] { false, null });
+                return val;
+            }
+            else
+                return pi.GetValue(this, null);
+        }
 
         public JControlOutputData OutputProperty()
         {
@@ -74,16 +118,7 @@ namespace JWCControlLib
             {
                 if(Attribute.IsDefined(pi,typeof(OutputableAttribute)))
                 {
-                    if (Attribute.IsDefined(pi, typeof(RedirectGSAttribute)))
-                    {
-                        object[] attrs = pi.GetCustomAttributes(typeof(RedirectGSAttribute), true);
-                        RedirectGSAttribute attr = (RedirectGSAttribute)attrs[0];
-                        var meth = this.GetType().GetMethod(attr.Fun, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-                        object val = meth.Invoke(this, new object[] { false, null });
-                        rst.Add(pi.Name,val);
-                    }
-                    else
-                        rst.Add(pi.Name, pi.GetValue(this, null));
+                    rst.Add(pi.Name, GetProp(pi));
                 }
             }
             return rst;
@@ -100,15 +135,7 @@ namespace JWCControlLib
                     if(dic.ContainsKey(pi.Name))
                     {
                         val = dic[pi.Name];
-                        if (Attribute.IsDefined(pi, typeof(RedirectGSAttribute)))
-                        {
-                            object[] attrs = pi.GetCustomAttributes(typeof(RedirectGSAttribute), true);
-                            RedirectGSAttribute attr = (RedirectGSAttribute)attrs[0];
-                            var meth = this.GetType().GetMethod(attr.Fun, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-                            meth.Invoke(this, new object[] { true, val });
-                        }
-                        else
-                            pi.SetValue(this, val, null);
+                        SetProp(pi, val);
                     }
                 }
             }
@@ -130,6 +157,7 @@ namespace JWCControlLib
             }
         }
 
+        [PropDiscribe(CreatorPropType.Text,"层叠位置","设置其z轴层叠的高度")]
         [Outputable]
         public int ZIndex
         {
@@ -143,27 +171,16 @@ namespace JWCControlLib
             }
         }
 
-        [Outputable]
-        public new string Name
-        {
-            get { return base.Name; }
-            set { base.Name = value; }
-        }
-        [Outputable]
-        public int ID
-        {
-            get;
-            set;
-        }
+      
 
 
 
         public void ClearEditorEvents()
         {
-            foreach (Delegate d in OnMoved.GetInvocationList())
-            {
-                OnMoved -= (Action<object>)d;
-            }
+            //foreach (Delegate d in OnMoved.GetInvocationList())
+            //{
+            //    OnMoved -= (Action<object>)d;
+            //}
         }
 
         public void GetFocus()
@@ -193,6 +210,7 @@ namespace JWCControlLib
                 this.OnLostFocus(this);
         }
 
+        [Obsolete("不应该再使用show了！",true)]
         public void Show()
         {
             Parent.Children.Add(this);
@@ -263,8 +281,8 @@ namespace JWCControlLib
                 {
                     ((FrameworkElement)this).Cursor = Cursors.Arrow;
                     this.ReleaseMouseCapture();
-                    if (OnMoved != null)
-                        OnMoved(this);
+                    //if (OnMoved != null)
+                    //    OnMoved(this);
                 }
             }      
         }

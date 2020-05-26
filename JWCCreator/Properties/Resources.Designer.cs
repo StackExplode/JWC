@@ -61,12 +61,12 @@ namespace JWCCreator.Properties {
         }
         
         /// <summary>
-        ///   查找 System.Drawing.Bitmap 类型的本地化资源。
+        ///   查找 System.Byte[] 类型的本地化资源。
         /// </summary>
-        internal static System.Drawing.Bitmap pixiv21596 {
+        internal static byte[] Grab {
             get {
-                object obj = ResourceManager.GetObject("pixiv21596", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                object obj = ResourceManager.GetObject("Grab", resourceCulture);
+                return ((byte[])(obj));
             }
         }
     }
