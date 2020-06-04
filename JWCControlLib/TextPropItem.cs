@@ -9,39 +9,44 @@ using System.Windows.Controls;
 
 
 
-namespace JWCCreator
+namespace JWCControlLib
 {
-    class TextPropItem:IPropItem
+    public class TextPropItem:APropItem
     {
-        protected JWCControl _Ctrl;
-        protected PropertyInfo _PI;
-        protected TextBox _Txtbox;
-        protected string _HelpString;
+        public override event OnPropValueChangedDele OnPropValueChanged;
+        public override event Action<string> TimeToShowHelpString;
         protected string _OldValue;
-
-        public event Action<object, PropertyInfo, object> OnPropValueChanged;
-        public event Action<string> TimeToShowHelpString;
-
-        public TextPropItem(JWCControl jc,PropertyInfo pi)
+        protected TextBox _Txtbox;
+        public TextPropItem(JWCControl jc,PropertyInfo pi,PropDiscribeAttribute attr)
         {
             _Ctrl = jc;
             _PI = pi;
+            _Attr = attr;
+            AutoSet = true;
         }
 
-        public FrameworkElement GetControl()
+        public override void ResumeValue()
+        {
+            _Txtbox.Text = _OldValue;
+        }
+
+        public override FrameworkElement GetControl()
         {
             DockPanel dp = new DockPanel();
             dp.Margin = new Thickness(6);
             Label lbl = new Label();
             _Txtbox = new TextBox();
+            lbl.VerticalAlignment =  _Txtbox.VerticalAlignment = VerticalAlignment.Center;
             dp.Children.Add(lbl);
             dp.Children.Add(_Txtbox);
             DockPanel.SetDock(lbl, Dock.Left);
             DockPanel.SetDock(_Txtbox, Dock.Left);
-            var info = PropManager.GetJWCPropDetail(_PI);
+            var info =  _Attr;
+            
             lbl.Content = info.FriendlyName + ":";
             _HelpString = info.Describe;
             _Txtbox.Text = _Ctrl.GetProp(_PI).ToString();
+            //_Txtbox.MaxWidth = _Txtbox.ActualWidth;
             _Txtbox.LostFocus += _Txtbox_LostFocus;
             _Txtbox.GotFocus += _Txtbox_GotFocus;
             _Txtbox.KeyUp += _Txtbox_KeyUp;
@@ -56,7 +61,7 @@ namespace JWCCreator
             }
             else if(e.Key == System.Windows.Input.Key.Escape)
             {
-                _Txtbox.Text = _OldValue;
+                ResumeValue();
             }
         }
 
@@ -69,19 +74,22 @@ namespace JWCCreator
 
         void ChangeProp()
         {
-            try
+            if(AutoSet)
             {
-                object val = Convert.ChangeType(_Txtbox.Text, _PI.PropertyType);
-                _Ctrl.SetProp(_PI, val);
-            }
-            catch(Exception ex)
-            {
-                MessageBox.Show("输入值不正确，设置将不会生效！","提示", MessageBoxButton.OK,MessageBoxImage.Error);
-                _Txtbox.Text = _OldValue;
+                try
+                {
+                    object val = Convert.ChangeType(_Txtbox.Text, _PI.PropertyType);
+                    _Ctrl.SetProp(_PI, val);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("输入值不正确，设置将不会生效！", "提示", MessageBoxButton.OK, MessageBoxImage.Error);
+                    ResumeValue();
+                }
             }
             
             if (OnPropValueChanged != null)
-                OnPropValueChanged(_Ctrl, _PI, _Txtbox.Text);
+                OnPropValueChanged(this,_Ctrl, _PI, _Txtbox.Text);
         }
 
         void _Txtbox_LostFocus(object sender, RoutedEventArgs e)
@@ -89,9 +97,12 @@ namespace JWCCreator
             ChangeProp();
         }
 
-        public void SetPropShowValue(object obj)
+        public override void SetPropShowValue(object obj)
         {
             _Txtbox.Dispatcher.Invoke((Action)delegate() { _Txtbox.Text = obj.ToString(); });
         }
+
+
+   
     }
 }

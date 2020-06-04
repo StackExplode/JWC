@@ -46,8 +46,17 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BoolPropItem.cs" />
+    <Compile Include="DialogWithTextPropItem.cs" />
+    <Compile Include="ICusDialog.cs" />
+    <Compile Include="IPropItem.cs" />
     <Compile Include="JWCControl.cs" />
     <Compile Include="JWCSerializer.cs" />
+    <Compile Include="MultiPropItem.cs" />
+    <Compile Include="OpenFilePropDialog.cs" />
+    <Compile Include="PropDialog.cs" />
+    <Compile Include="PropItemFactory.cs" />
+    <Compile Include="TextPropItem.cs" />
     <Compile Include="ThumbAdder.cs" />
     <Compile Include="OutputableAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

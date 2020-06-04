@@ -29,6 +29,7 @@ namespace JWCControlLib
         Text,
         Boolean,
         DropDown,
+        EnumDropDown,
         Dialog,
         DialogWithText,
         Flag,
@@ -51,6 +52,23 @@ namespace JWCControlLib
             Param = pa;
         }
     }
+
+     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
+    public class SubPropAttribute:Attribute
+    {
+         public string Describe = "";
+        public CreatorPropType ShowType = CreatorPropType.Text;
+        public object Param;
+        public string FriendlyName = "";
+        public SubPropAttribute(CreatorPropType stype, string fname, string desc = "无帮助文本", object pa = null)
+        {
+            ShowType = stype;
+            Describe = desc;
+            FriendlyName = fname;
+            Param = pa;
+        }
+    }
+
 
 
 }

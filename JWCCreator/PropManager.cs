@@ -20,11 +20,14 @@ namespace JWCCreator
 {
     class PropManager
     {
-        private Label _Indicator;
+        private ComboBox _CombInd;
         private StackPanel _PropPanel;
         private TextBlock _TxtHelp;
         private static readonly SolidColorBrush color1;
         private static readonly SolidColorBrush color2;
+
+        private Action<object> SetMarginFun;
+        private Action<object> SetSizeFun;
 
          static PropManager()
         {
@@ -32,9 +35,9 @@ namespace JWCCreator
             color2 = new SolidColorBrush(Color.FromArgb(255, 0x9A, 0xDE, 0xF7));
         }
 
-        public PropManager(Label lbl,StackPanel pan,TextBlock hp)
+        public PropManager(ComboBox cc,StackPanel pan,TextBlock hp)
         {
-            _Indicator = lbl;
+            _CombInd = cc;
             _PropPanel = pan;
             _TxtHelp = hp;
         }
@@ -47,21 +50,24 @@ namespace JWCCreator
 
         public void RefreshStageProp(Stage st)
         {
-            _Indicator.Content = "[背景/全局]";
+            _CombInd.SelectedItem = null;
 
             _PropPanel.Children.Clear();
         }
 
         public void RefreshCurrName(JWCControl ctrl)
         {
-            string fn = GetJWCCFullName(ctrl);
-            string name = string.IsNullOrEmpty(ctrl.Name)?"[无名称]":ctrl.Name;
-            _Indicator.Dispatcher.Invoke(
-                (Action)(delegate()
-                        {
-                            _Indicator.Content = string.Format("{0}({1})", name, fn);
-                        })
-                );
+            //string fn = GetJWCCFullName(ctrl);
+            //string name = string.IsNullOrEmpty(ctrl.Name)?"[无名称]":ctrl.Name;
+            //_Indicator.Dispatcher.Invoke(
+            //    (Action)(delegate()
+            //            {
+            //                _Indicator.Content = string.Format("{0}({1})", name, fn);
+            //            })
+            //    );
+            _CombInd.SelectedItem = null;
+            _CombInd.SelectedItem = ctrl;
+            
         }
 
         public void RefreshPropList(JWCControl ctrl)
@@ -74,7 +80,7 @@ namespace JWCCreator
                 if(Attribute.IsDefined(pi,typeof(PropDiscribeAttribute)))
                 {
                     PropDiscribeAttribute pat = pi.GetCustomAttributes(typeof(PropDiscribeAttribute), true)[0] as PropDiscribeAttribute;
-                    IPropItem itm = PropItemFactory.GetPropItem(pat.ShowType, ctrl, pi);
+                    APropItem itm = PropItemFactory.GetPropItem(pat, ctrl, pi);
                     var showitm = itm.GetControl();
                     Grid grd = new Grid();
                     grd.Background = cl ? color1 : color2;
@@ -84,11 +90,26 @@ namespace JWCCreator
                     itm.TimeToShowHelpString += itm_TimeToShowHelpString;
                     if(pi.Name == "Name")
                         itm.OnPropValueChanged += itm_OnPropValueChanged;
+                    else if (pi.Name == "Size")
+                        this.SetSizeFun = itm.SetPropShowValue;
+                    else if (pi.Name == "Margin")
+                        this.SetMarginFun = itm.SetPropShowValue;
+                    
                 }
             }
         }
 
-        void itm_OnPropValueChanged(object arg1, PropertyInfo arg2, object arg3)
+        public void RefreshMargin(double x,double y)
+        {
+            SetMarginFun(new object[] { x, y, 0, 0 });
+        }
+        
+        public void RefreshSize(double x,double y)
+        {
+            SetSizeFun(new object[] { x, y });
+        }
+
+        void itm_OnPropValueChanged(APropItem sender, JWCControl arg1, PropertyInfo arg2, object arg3)
         {
             JWCControl jc = arg1 as JWCControl;
             if (jc == null)
@@ -102,13 +123,6 @@ namespace JWCCreator
             _TxtHelp.Dispatcher.Invoke((Action)delegate() { _TxtHelp.Text = obj; });
         }
 
-        public static PropDiscribeAttribute GetJWCPropDetail(PropertyInfo pi)
-        {
-            if (Attribute.IsDefined(pi, typeof(PropDiscribeAttribute)))
-            {
-                return pi.GetCustomAttributes(typeof(PropDiscribeAttribute), true)[0] as PropDiscribeAttribute;
-            }
-            return null;
-        }
+        
     }
 }

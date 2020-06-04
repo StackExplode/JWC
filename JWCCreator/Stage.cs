@@ -25,15 +25,21 @@ namespace JWCCreator
         private ScrollViewer _Scroller = null;
         private ScaleTransform _Scaller = null;
         private Cursor grab_cur;
+        private ComboBox _CombAll = null;
+        private ObservableCollection<JWCControl> AllCtrls = new ObservableCollection<JWCControl>();
 
         public event Action<bool,object> OnSelectionChanged;
+        public event Action<object, double, double> OnSelectedCtrlMoved;
+        public event Action<object, double, double> OnSelectedCtrlResized;
         public JWCControl SelectedControl { get { return _Selecting_Ctrl; } }
 
-        public Stage(Grid grd,ScrollViewer sv,ScaleTransform sc)
+        public Stage(Grid grd,ScrollViewer sv,ScaleTransform sc,ComboBox cbx)
         {
             _Scaller = sc;
             _Scroller = sv;
             grid_main = grd;
+            _CombAll = cbx;
+            _CombAll.ItemsSource = AllCtrls;
             grab_cur = new Cursor(new System.IO.MemoryStream(Properties.Resources.Grab));
             Initialization();
         }
@@ -59,21 +65,40 @@ namespace JWCCreator
             ctrl.Parent = grid_main;
             ctrl.OnGotFocus += xx_OnGotFocus;
             grid_main.Children.Add(ctrl);
+            AllCtrls.Add(ctrl);
         }
 
         public void RemoveCtonrol(JWCControl ctrl)
         {
             grid_main.Children.Remove(ctrl);
+            AllCtrls.Remove(ctrl);
         }
 
 
         void xx_OnGotFocus(object obj)
         {
             if (_Selecting_Ctrl != null)
+            {
+                _Selecting_Ctrl.OnMovedOrResized -= _Selecting_Ctrl_OnMovedOrResized;
                 _Selecting_Ctrl.LoseFocus();
+            }
+                
             _Selecting_Ctrl = obj as JWCControl;
+            _Selecting_Ctrl.OnMovedOrResized += _Selecting_Ctrl_OnMovedOrResized;
             if (OnSelectionChanged != null)
                 OnSelectionChanged(true,obj);
+        }
+
+        void _Selecting_Ctrl_OnMovedOrResized(object arg1, bool rz, System.Windows.Controls.Primitives.DragCompletedEventArgs arg2)
+        {
+            if(!rz && OnSelectedCtrlMoved != null)
+            {
+                OnSelectedCtrlMoved(arg1, _Selecting_Ctrl.Margin.Left, _Selecting_Ctrl.Margin.Top);
+            }
+            if (rz && OnSelectedCtrlResized != null)
+            {
+                OnSelectedCtrlResized(arg1, _Selecting_Ctrl.Width, _Selecting_Ctrl.Height);
+            }
         }
 
         bool Scr_Draging = false;

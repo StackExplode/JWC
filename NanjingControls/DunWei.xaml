@@ -5,9 +5,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:vc="clr-namespace:JWCControlLib;assembly=JWCControlLib"
              xmlns:local="clr-namespace:JWCControlLib;assembly=JWCControlLib"
-             mc:Ignorable="d" 
+             mc:Ignorable="d" Width="170" Height="70" 
              >
-    <Grid x:Name="grid1" Background="Transparent">
+    <Grid x:Name="grid1" Background="Transparent" >
         <Image x:Name="img1" Panel.ZIndex="0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  ScrollViewer.VerticalScrollBarVisibility="Disabled" Stretch="Fill"/>
     </Grid>
 </local:JWCControl>

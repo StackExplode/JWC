@@ -29,7 +29,8 @@ namespace JWCControlLib
         public Size ResizerSize { get; set; }
         public double ResizerThickness { get; set; }
 
-        public event DragCompletedEventHandler OnDragFinished;
+        public event DragCompletedEventHandler OnResizeFinished;
+        public event DragCompletedEventHandler OnMoveFinished;
 
         public ThumbAdder(UserControl ctrl, Grid grd)
         {
@@ -270,7 +271,7 @@ namespace JWCControlLib
             if(move)
             {
                 InitMove();
-                _TmbMove.DragCompleted += (s, e) => { OnDragFinished(s, e); };
+                _TmbMove.DragCompleted += (s, e) => { OnMoveFinished(s, e); };
             }
             if (resize)
             {
@@ -282,14 +283,14 @@ namespace JWCControlLib
                 InitSize_EN();
                 InitSize_WS();
                 InitSize_WN();
-                _TmbSize_S.DragCompleted += (s, e) => { OnDragFinished(s, e); };
-                _TmbSize_N.DragCompleted += (s, e) => { OnDragFinished(s, e); };
-                _TmbSize_W.DragCompleted += (s, e) => { OnDragFinished(s, e); };
-                _TmbSize_E.DragCompleted += (s, e) => { OnDragFinished(s, e); };
-                _TmbSize_ES.DragCompleted += (s, e) => { OnDragFinished(s, e); };
-                _TmbSize_EN.DragCompleted += (s, e) => { OnDragFinished(s, e); };
-                _TmbSize_WS.DragCompleted += (s, e) => { OnDragFinished(s, e); };
-                _TmbSize_WN.DragCompleted += (s, e) => { OnDragFinished(s, e); };
+                _TmbSize_S.DragCompleted += (s, e) => { OnResizeFinished(s, e); };
+                _TmbSize_N.DragCompleted += (s, e) => { OnResizeFinished(s, e); };
+                _TmbSize_W.DragCompleted += (s, e) => { OnResizeFinished(s, e); };
+                _TmbSize_E.DragCompleted += (s, e) => { OnResizeFinished(s, e); };
+                _TmbSize_ES.DragCompleted += (s, e) => { OnResizeFinished(s, e); };
+                _TmbSize_EN.DragCompleted += (s, e) => { OnResizeFinished(s, e); };
+                _TmbSize_WS.DragCompleted += (s, e) => { OnResizeFinished(s, e); };
+                _TmbSize_WN.DragCompleted += (s, e) => { OnResizeFinished(s, e); };
             }
         }
 

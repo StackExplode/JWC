@@ -25,12 +25,48 @@ namespace JWCCreator
     {
         Stage stage;
         PropManager pm;
+
+        class ZMR
+        {
+            public ZMR(string s, int v)
+            {
+                Name = s;
+                Content = v;
+            }
+            public string Name { get; set; }
+            public int Content { get; set; }
+        }
+
         public MainWindow()
         {
             InitializeComponent();
-            stage = new Stage(grid_main,scrollv1,scale1);
+            stage = new Stage(grid_main, scrollv1, scale1, cmb_allc);
             stage.OnSelectionChanged += stage_SelectionChanged;
-            pm = new PropManager(lbl_currctrl,pan_prop,txt_help);
+            stage.OnSelectedCtrlMoved += (s, x, y) => { pm.RefreshMargin(x, y); };
+            stage.OnSelectedCtrlResized += (s, x, y) => { pm.RefreshSize(x, y); };
+            pm = new PropManager(cmb_allc,pan_prop,txt_help);
+
+            
+
+            cmb_allc.IsEditable = false;
+            cmb_allc.IsReadOnly = false;
+            //ObservableCollection<JWCControl> temp = new ObservableCollection<JWCControl>();
+            //cmb_allc.ItemsSource = temp;
+           
+            //var xx = new JWCControl();
+            //xx.Name = "aaa";
+            //xx.Content = new ZMR("111",101);
+            //temp.Add(xx);
+            //xx = new JWCControl();
+            //xx.Name = "bbb";
+            //xx.Content = new ZMR("222", 102);
+            //temp.Add(xx);
+            //xx = new JWCControl();
+            //xx.Name = "ccc";
+            //xx.Content = new ZMR("333", 103);
+            //temp.Add(xx);
+            
+
         }
 
          void stage_SelectionChanged(bool arg1, object arg2)
@@ -126,8 +162,8 @@ namespace JWCCreator
                 xx.HorizontalAlignment = System.Windows.HorizontalAlignment.Left;
                 xx.VerticalAlignment = System.Windows.VerticalAlignment.Top;
                 //xx.ShowPic = true;
-                xx.Width = 350;
-                xx.Height = 350;
+                //xx.Width = 350;
+                //xx.Height = 350;
                 xx.IsEditMode = true;
                 xx.ZIndex = 6;
                 stage.AddControl(xx);
@@ -144,6 +180,16 @@ namespace JWCCreator
         {
             if (e.Key == Key.P)
                 MessageBox.Show("P Press!");
+        }
+
+        private void cmb_allc_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            JWCControl ctrl = cmb_allc.SelectedItem as JWCControl;
+            if (ctrl == null)
+                return;
+            if (ctrl == stage.SelectedControl)
+                return;
+            ctrl.GetFocus();
         }
     }
 }

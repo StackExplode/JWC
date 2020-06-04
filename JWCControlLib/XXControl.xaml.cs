@@ -41,26 +41,34 @@ namespace JWCControlLib
             set { grid1.Background = new SolidColorBrush(value); } 
         }
 
-        private static object GSR_ForeColor(object obj,bool isset,object val = null)
+        protected object[] GSR_ForeColor(bool isset,object[] val)
         {
-            XXControl me = obj as XXControl;
+            XXControl me = this;
             if(isset)
             {
-                var mth = Regex.Match((string)val, "([0-9]{1,3}),([0-9]{1,3}),([0-9]{1,3}),([0-9]{1,3})");
-                var rst = mth.Groups;
-                me.ForeColor = Color.FromArgb(byte.Parse(rst[4].Value), byte.Parse(rst[1].Value), byte.Parse(rst[2].Value), byte.Parse(rst[3].Value));
+                //var mth = Regex.Match((string)val, "([0-9]{1,3}),([0-9]{1,3}),([0-9]{1,3}),([0-9]{1,3})");
+                //var rst = mth.Groups;
+                //me.ForeColor = Color.FromArgb(byte.Parse(rst[4].Value), byte.Parse(rst[1].Value), byte.Parse(rst[2].Value), byte.Parse(rst[3].Value));
+
+                byte R = Convert.ToByte(val[0]);
+                byte G = Convert.ToByte(val[1]);
+                byte B = Convert.ToByte(val[2]);
+                byte A = Convert.ToByte(val[3]);
+
+                me.ForeColor = Color.FromArgb(A, R, G, B);
                 return null;
             }
             else
             {
                 Color cl = me.ForeColor;
-                return string.Format("{0},{1},{2},{3}", cl.R, cl.G, cl.B, cl.A);
+                return new object[] { cl.R, cl.G, cl.B, cl.A };
             }
         }
 
         
         bool _showpick = false;
 
+        [PropDiscribe(CreatorPropType.Boolean,"显示图片","测试！")]
         [Outputable]
         public bool ShowPic
         {

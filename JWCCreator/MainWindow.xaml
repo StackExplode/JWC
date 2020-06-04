@@ -4,6 +4,23 @@
         xmlns:jcl="clr-namespace:JWCControlLib;assembly=JWCControlLib"
         xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" x:Name="JWCCMainWindow" x:Class="JWCCreator.MainWindow"
         Title="MainWindow" Height="703" Width="1260" Loaded="JWCCMainWindow_Loaded" WindowStyle="ThreeDBorderWindow" MinHeight="355" MinWidth="630">
+    <Window.Resources>
+        <ControlTemplate x:Key="DetailedTemplate" TargetType="{x:Type ContentControl}">
+            <Grid>
+                <Rectangle x:Name="background" Fill="White" />
+                <TextBlock x:Name="ttt" Text="{Binding PropDispName}" FontSize="12"/>
+            </Grid>
+            
+            <ControlTemplate.Triggers>
+                <DataTrigger Binding="{Binding ElementName=ttt,Path=IsMouseOver}" Value="True">
+                    <Setter Property="Fill" Value="Blue" TargetName="background"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding ElementName=ttt,Path=IsMouseOver}" Value="False">
+                    <Setter Property="Fill" Value="White" TargetName="background"/>
+                </DataTrigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </Window.Resources>
     <DockPanel LastChildFill="True" Background="#FFDEDEDE">
         <ToolBarPanel DockPanel.Dock="Top" Height="32" HorizontalAlignment="Left">
             <ToolBar  Height="32" AllowDrop="True" Width="130" ToolBarTray.IsLocked="True"  >
@@ -39,59 +56,31 @@
                 <ColumnDefinition Width="2*" />
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
-                
-                <ScrollViewer  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible" Background="White" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,0,0,124" Grid.RowSpan="3">
+
+                <ScrollViewer  HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Visible" Background="White" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" Margin="0,0,0,124" Grid.RowSpan="3">
                     <StackPanel x:Name="stackpanel" Margin="0" Orientation="Vertical" >
                         <DockPanel Margin="0,10,0,5">
                             <Label DockPanel.Dock="Left" Content="当前对象："></Label>
-                            <Label x:Name="lbl_currctrl" DockPanel.Dock="Left" Content="Myctrl1(NJWC.AAA)"></Label>
-                            
+                            <Label x:Name="lbl_currctrl" DockPanel.Dock="Left">
+                            </Label>
+                        
                         </DockPanel>
+                        <ComboBox x:Name="cmb_allc" DisplayMemberPath="Parent.PropDispName"  SelectedItem="{Binding SelectedJWCControl.Name}" SelectionChanged="cmb_allc_SelectionChanged" FontSize="12">
+                            <ComboBox.ItemContainerStyle>
+                                <Style TargetType="{x:Type ComboBoxItem}">
+                                    <Setter Property="Template" Value="{StaticResource DetailedTemplate}" />
+                                    
+                                </Style>
+                            </ComboBox.ItemContainerStyle>
+                        </ComboBox>
+
                         <Separator/>
                         <StackPanel x:Name="pan_prop">
-                            <Grid Background="#FFB0F0F0">
-                            <DockPanel Margin="5"  >
-                                <Label DockPanel.Dock="Left" Content="属性："></Label>
-                                <TextBox DockPanel.Dock="Left"></TextBox>
-                            </DockPanel>
-                        </Grid>
-                        <Grid Background="#FF9ADEF7">
-                            <DockPanel Margin="5"  >
-                                <Label DockPanel.Dock="Left" Content="属性："></Label>
-                                <TextBox DockPanel.Dock="Left"></TextBox>
-                            </DockPanel>
-                        </Grid>
-                        <Grid Background="#FFB0F0F0">
-                            <DockPanel Margin="5">
-                                <Label VerticalAlignment="Center" DockPanel.Dock="Left" Content="尺寸：" ></Label>
-                                <StackPanel>
-                                    <DockPanel Margin="6">
-                                        <Label DockPanel.Dock="Left" Content="XXX属性：" ></Label>
-                                        <TextBox DockPanel.Dock="Left"></TextBox>
-                                    </DockPanel>
-                                    <DockPanel Margin="6">
-                                        <Label DockPanel.Dock="Left" Content="XXX属性：" ></Label>
-                                        <TextBox DockPanel.Dock="Left"></TextBox>
-                                    </DockPanel>
-                                </StackPanel>
-                            </DockPanel>
-                        </Grid>
-
-                            <Grid Background="#FF9ADEF7">
-                                <DockPanel Margin="6">
-                                    <Label DockPanel.Dock="Left" Content="XXX属性：" ></Label>
-                                    <ComboBox DockPanel.Dock="Left" IsReadOnly="True">
-
-                                        <ComboBoxItem Content="选项1"/>
-                                        <ComboBoxItem Content="选项2"/>
-                                        <ComboBoxItem Content="选项3"/>
-                                    </ComboBox>
-                                </DockPanel>
-                            </Grid>
+                            
 
                         </StackPanel>
-                        
-                  
+
+
                     </StackPanel>
                 </ScrollViewer>
                 <DockPanel VerticalAlignment="Bottom" >
@@ -99,7 +88,7 @@
                     <Label DockPanel.Dock="Bottom" Content="Hint:"  Margin="0"/>
                     <Separator DockPanel.Dock="Bottom"></Separator>
                 </DockPanel>
-                
+
             </Grid>
 
             <ScrollViewer x:Name="scrollv1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" BorderThickness="0" PanningDeceleration="1" CanContentScroll="True" KeyDown="scrollv1_KeyDown">
@@ -117,7 +106,7 @@
                         <ScaleTransform x:Name="scale1" 
 							CenterX="0" CenterY="0"
 							ScaleX="1" ScaleY="1"/>
-                        
+
                     </Grid.LayoutTransform>
                 </Grid>
             </ScrollViewer>

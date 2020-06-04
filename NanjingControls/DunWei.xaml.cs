@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using JWCControlLib;
 using System.IO;
 using System.Drawing.Imaging;
+using System.Reflection;
 
 namespace NanjingControls
 {
@@ -27,36 +28,43 @@ namespace NanjingControls
         public  const string Fname = "WC蹲位";
         public  const string DescribeString = "用两张图片指示两个状态的蹲位";
 
-        public static string FriendlyName
-        {
-            get
-            {
-                return Fname;
-            }
-        }
+        protected BitmapImage UsingBitmap;
+        protected BitmapImage FreeBitmap;
+        protected string UsingPath = "";
+        protected string FreePath = "";
 
-        public static string Description
-        {
-            get
-            {
-                return DescribeString;
-            }
-        }
+        //public static string FriendlyName
+        //{
+        //    get
+        //    {
+        //        return Fname;
+        //    }
+        //}
+
+        //public static string Description
+        //{
+        //    get
+        //    {
+        //        return DescribeString;
+        //    }
+        //}
+
+        protected static readonly BitmapImage Default_UsingImage = new BitmapImage(new Uri(@"pack://application:,,,/" + Assembly.GetExecutingAssembly().GetName().Name + ";component/Resources/using.png"));
+        protected static readonly BitmapImage Default_FreeImage = new BitmapImage(new Uri(@"pack://application:,,,/" + Assembly.GetExecutingAssembly().GetName().Name + ";component/Resources/free.png"));
 
         public DunWei():base()
         {
             InitializeComponent();
             base.BindMainGrid(grid1);
-            UsingBitmap = new BitmapImage(new Uri("file:///" + GetPic_Debug(true)));
-            FreeBitmap = new BitmapImage(new Uri("file:///" + GetPic_Debug(false)));
+            UsingBitmap = Default_UsingImage;
+            FreeBitmap = Default_FreeImage;
             IsUing = true;
             //img1.Source = ToBitMapSource(Properties.Resources._58699774_p0);
         }
 
      
 
-        protected BitmapImage UsingBitmap;
-        protected BitmapImage FreeBitmap;
+       
 
 #if DEBUG
         string GetPic_Debug(bool use)
@@ -69,6 +77,8 @@ namespace NanjingControls
         }
 #endif
         bool _isusing = false;
+
+        [PropDiscribe(CreatorPropType.Boolean,"有人","指示默认蹲位是否有人")]
         [Outputable]
         public bool IsUing
         {
@@ -79,12 +89,44 @@ namespace NanjingControls
             set
             {
                 if (value)
-                    this.img1.Source = UsingBitmap;
+                    this.img1.Source = UsingBitmap;    
                 else
                     this.img1.Source = FreeBitmap;
+                _isusing = value;
             }
         }
 
+        [PropDiscribe(CreatorPropType.DialogWithText, "有人图片", "当蹲位有人时显示的图片绝对路径，留空则使用内置图片",
+           new object[] { "打开", typeof(OpenFilePropDialog), new object[] { "图片|*.jpg;*.png;*.gif;*.jpeg;*.bmp", false } })]
+        [Outputable]
+        public string UsingImage
+        {
+            get { return UsingPath; }
+            set
+            {
+                UsingPath = value;
+                if (value == String.Empty)
+                    UsingBitmap = Default_UsingImage;
+                else
+                    UsingBitmap = new BitmapImage(new Uri(@"file:///"+value));
+            }
+        }
+
+        [PropDiscribe(CreatorPropType.DialogWithText, "无人图片", "当蹲位无人时显示的图片绝对路径，留空则使用内置图片",
+             new object[] { "打开", typeof(OpenFilePropDialog), new object[] { "图片|*.jpg;*.png;*.gif;*.jpeg;*.bmp", false } })]
+        [Outputable]
+        public string FreeImage
+        {
+            get { return FreePath; }
+            set
+            {
+                FreePath = value;
+                if (value == String.Empty)
+                    FreeBitmap = Default_FreeImage;
+                else
+                    FreeBitmap = new BitmapImage(new Uri(@"file:///" + value));
+            }
+        }
 
     }
 }
