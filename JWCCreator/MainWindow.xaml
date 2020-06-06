@@ -4,7 +4,9 @@
         xmlns:jcl="clr-namespace:JWCControlLib;assembly=JWCControlLib"
         xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" x:Name="JWCCMainWindow" x:Class="JWCCreator.MainWindow"
         Title="MainWindow" Height="703" Width="1260" Loaded="JWCCMainWindow_Loaded" WindowStyle="ThreeDBorderWindow" MinHeight="355" MinWidth="630">
+    
     <Window.Resources>
+        <RoutedUICommand x:Key="zoomincmd"></RoutedUICommand>
         <ControlTemplate x:Key="DetailedTemplate" TargetType="{x:Type ContentControl}">
             <Grid>
                 <Rectangle x:Name="background" Fill="White" />
@@ -21,9 +23,82 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
     </Window.Resources>
+   
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Control"  Key="Add" Command="{StaticResource zoomincmd}"/>
+    </Window.InputBindings>
+    <Window.CommandBindings>
+        <CommandBinding Command="{StaticResource zoomincmd}" Executed="CommandBinding_Executed"></CommandBinding>
+    </Window.CommandBindings>
     <DockPanel LastChildFill="True" Background="#FFDEDEDE">
         <ToolBarPanel DockPanel.Dock="Top" Height="32" HorizontalAlignment="Left">
-            <ToolBar  Height="32" AllowDrop="True" Width="130" ToolBarTray.IsLocked="True"  >
+            <ToolBar  Height="32" AllowDrop="True"  ToolBarTray.IsLocked="True" UseLayoutRounding="False"  >
+                <Button Width="24" Height="24"  Style="{StaticResource {x:Type Button}}" Click="Button_Click" ToolTip="新建文档(Ctrl+N)" >
+                    <Button.Background>
+                        <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/312321_01.jpg" />
+                    </Button.Background>
+                </Button>
+                <Button Width="24" Height="24"  Style="{StaticResource {x:Type Button}}" >
+                    <Button.Background>
+                        <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/312321_02.gif" />
+                    </Button.Background>
+                </Button>
+                <Button Width="24" Height="24"  Style="{StaticResource {x:Type Button}}" >
+                    <Button.Background>
+                        <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/312321_03.gif" />
+                    </Button.Background>
+                </Button>
+                <Separator/>
+                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}" Content="+" Click="Button_Click_1" >
+             
+                </Button>
+                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  Click="Button_Click_1" >
+                    <Button.Background>
+                        <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/de.png" />
+                    </Button.Background>
+                </Button>
+                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  Click="Button_Click_1" >
+                    <Button.Background>
+                        <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/312321_08.gif" />
+                    </Button.Background>
+                </Button>
+                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  Click="Button_Click_1" >
+                    <Button.Background>
+                        <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/312321_09.gif" />
+                    </Button.Background>
+                </Button>
+                <Separator />
+                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  Click="Button_Click_2" ToolTip="放大(Ctrl+=)" >
+                    <Button.Background>
+                        <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/zoomin.jpg" />
+                    </Button.Background>
+                </Button>
+                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  Click="Button_Click_3" ToolTip="缩小(Ctrl+-)" >
+                    <Button.Background>
+                        <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/zoomout.jpg" />
+                    </Button.Background>
+                </Button>
+                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  Click="Button_Click_4" ToolTip="恢复缩放(Ctrl+\)" >
+                    <Button.Background>
+                        <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/rezoom.ico" />
+                    </Button.Background>
+                </Button>
+                <Separator />
+                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  >
+                    <Button.Background>
+                        <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/comdlg32_528.ico" />
+                    </Button.Background>
+                </Button>
+                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  >
+                    <Button.Background>
+                        <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/msnp32_WRKGRP_ICON.ico" />
+                    </Button.Background>
+                </Button>
+                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  >
+                    <Button.Background>
+                        <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/wmsui32_EXCLAMATION.ico" />
+                    </Button.Background>
+                </Button>
                 <RadioButton ToolTip="Red" Click="ColorButton_Click" Tag="1">
                     <Rectangle Width="10" Height="10" Fill="Red"/>
                 </RadioButton>
@@ -91,7 +166,7 @@
 
             </Grid>
 
-            <ScrollViewer x:Name="scrollv1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" BorderThickness="0" PanningDeceleration="1" CanContentScroll="True" KeyDown="scrollv1_KeyDown">
+            <ScrollViewer x:Name="scrollv1" Grid.Column="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" BorderThickness="0" PanningDeceleration="1" CanContentScroll="True">
 
 
                 <ScrollViewer.CacheMode>

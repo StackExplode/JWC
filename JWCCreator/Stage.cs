@@ -18,7 +18,7 @@ using System.Collections.ObjectModel;
 
 namespace JWCCreator
 {
-    class Stage
+    class Stage : IDisposable
     {
         private Grid grid_main;
         private JWCControl _Selecting_Ctrl = null;
@@ -46,18 +46,43 @@ namespace JWCCreator
 
         private void Initialization()
         {
-            grid_main.MouseDown += (a, b) => { 
-                if (_Selecting_Ctrl != null)
-                    _Selecting_Ctrl.LoseFocus(); 
-                _Selecting_Ctrl = null;
-                if (OnSelectionChanged != null)
-                    OnSelectionChanged(false,grid_main);
+            grid_main.MouseDown += (a, b) => {
+                UnSelectControl();
             };
             _Scroller.PreviewMouseRightButtonDown += scrollv1_MouseRightButtonDown;
             _Scroller.PreviewMouseRightButtonUp += scrollv1_MouseRightButtonUp;
             _Scroller.PreviewMouseMove += scrollv1_MouseMove;
             _Scroller.ManipulationBoundaryFeedback += scrollv1_ManipulationBoundaryFeedback;
             _Scroller.PreviewMouseWheel += scrollv1_PreviewMouseWheel;
+        }
+
+        public void ClearAll(int w,int h)
+        {
+            if (_Selecting_Ctrl != null)
+                _Selecting_Ctrl.LoseFocus();
+            UnSelectControl();
+            grid_main.Children.Clear();
+            AllCtrls.Clear();
+            grid_main.Width = w;
+            grid_main.Height = h;
+            grid_main.Background = new SolidColorBrush(Colors.White);
+            ZoomReset();
+        }
+
+        private void UnSelectControl()
+        {
+            if (_Selecting_Ctrl != null)
+                _Selecting_Ctrl.LoseFocus();
+            _Selecting_Ctrl = null;
+            if (OnSelectionChanged != null)
+                OnSelectionChanged(false, grid_main);
+        }
+
+        public void RemoveSelecting()
+        {
+            if (_Selecting_Ctrl != null)
+                RemoveCtonrol(_Selecting_Ctrl);
+            UnSelectControl();
         }
 
         public void AddControl(JWCControl ctrl)
@@ -215,6 +240,11 @@ namespace JWCCreator
             }
 
 
+        }
+
+        public void Dispose()
+        {
+            grab_cur.Dispose();
         }
     }
 }

@@ -38,6 +38,9 @@ namespace JWCControlLib
             set { base.Name = value; }
         }
 
+
+        
+
         public string PropDispName
         {
             get
@@ -48,9 +51,13 @@ namespace JWCControlLib
             }
         }
 
-        [PropDiscribe(CreatorPropType.Text, "ID", "在参与通信时的唯一标识符，其只能由数字组成")]
-        [Outputable]
-        public int ID { get; set; }
+        //[PropDiscribe(CreatorPropType.EnumDropDown, "通信标识类型", "控制通信时使用哪种唯一标识", true)]
+        //[Outputable]
+        //public ComuIDType ComType { get; set; }
+
+        //[PropDiscribe(CreatorPropType.Text, "ID", "在参与通信时的唯一标识符，其只能由数字组成")]
+        //[Outputable]
+        //public int ID { get; set; }
 
         public JWCControl()
         {

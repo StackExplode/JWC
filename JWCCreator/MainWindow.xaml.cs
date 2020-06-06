@@ -37,6 +37,8 @@ namespace JWCCreator
             public int Content { get; set; }
         }
 
+       
+
         public MainWindow()
         {
             InitializeComponent();
@@ -190,6 +192,37 @@ namespace JWCCreator
             if (ctrl == stage.SelectedControl)
                 return;
             ctrl.GetFocus();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            stage.ClearAll(800, 600);
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            stage.RemoveSelecting();
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            stage.ZoomInOut(0.25);
+        }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            stage.ZoomInOut(-0.25);
+        }
+
+        private void Button_Click_4(object sender, RoutedEventArgs e)
+        {
+            stage.ZoomReset();
+        }
+
+        private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Button_Click_2(null, null);
+          
         }
     }
 }

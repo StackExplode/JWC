@@ -109,9 +109,92 @@
       <Name>JWCControlLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <None Include="Resources\Grab.cur" />
+    <Resource Include="Resources\312321_01.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Grab.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\312321_02.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\312321_03.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\312321_04.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\312321_05.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\312321_06.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\312321_07.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\312321_08.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\312321_09.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\312321_10.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\312321_11.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\312321_12.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\312321_13.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\312321_14.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\312321_15.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\312321_16.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\312321_17.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\de.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\del.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\rezoom.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\que.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\zoomin.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\zoomout.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\comdlg32_528.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\confcp_118.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\intl_101.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\msnp32_WRKGRP_ICON.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\wmsui32_EXCLAMATION.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -17,13 +17,14 @@ using JWCControlLib;
 using System.IO;
 using System.Drawing.Imaging;
 using System.Reflection;
+using JWCCommunicationLib;
 
 namespace NanjingControls
 {
     /// <summary>
     /// DunWei.xaml 的交互逻辑
     /// </summary>
-    public partial class DunWei : JWCControlLib.JWCControl
+    public partial class DunWei : JWCControlLib.JWCControl,IDataReceiver
     {
         public  const string Fname = "WC蹲位";
         public  const string DescribeString = "用两张图片指示两个状态的蹲位";
@@ -128,5 +129,19 @@ namespace NanjingControls
             }
         }
 
+
+        public void SetControlState(object obj)
+        {
+            bool b = (bool)obj;
+            this.IsUing = b;
+        }
+
+        [PropDiscribe( CreatorPropType.Text,"发送ID","身为发送者的ID")]
+        [Outputable]
+        public string RecID
+        {
+            get;
+            set;
+        }
     }
 }

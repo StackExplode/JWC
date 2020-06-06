@@ -1,22 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Media.Imaging;
+using System.ComponentModel;
 
 namespace JWCControlLib
 {
     [AttributeUsage(AttributeTargets.Property)]
-    public class OutputableAttribute:Attribute
+    public class OutputableAttribute : Attribute
     {
-
     }
 
-
-    [AttributeUsage(AttributeTargets.Property,AllowMultiple=false)]
-    public class RedirectGSAttribute:Attribute
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    public class RedirectGSAttribute : Attribute
     {
         public string Fun { get; set; }
+
         //public Func<object, bool, object,object> Func;
         public RedirectGSAttribute(string fun)
         {
@@ -38,13 +34,14 @@ namespace JWCControlLib
     }
 
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class PropDiscribeAttribute:Attribute
+    public class PropDiscribeAttribute : Attribute
     {
         public string Describe = "";
         public CreatorPropType ShowType = CreatorPropType.Text;
         public object Param;
         public string FriendlyName = "";
-        public PropDiscribeAttribute(CreatorPropType stype,string fname, string desc="无帮助文本",object pa=null)
+
+        public PropDiscribeAttribute(CreatorPropType stype, string fname, string desc = "无帮助文本", object pa = null)
         {
             ShowType = stype;
             Describe = desc;
@@ -53,13 +50,14 @@ namespace JWCControlLib
         }
     }
 
-     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
-    public class SubPropAttribute:Attribute
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
+    public class SubPropAttribute : Attribute
     {
-         public string Describe = "";
+        public string Describe = "";
         public CreatorPropType ShowType = CreatorPropType.Text;
         public object Param;
         public string FriendlyName = "";
+
         public SubPropAttribute(CreatorPropType stype, string fname, string desc = "无帮助文本", object pa = null)
         {
             ShowType = stype;
@@ -69,6 +67,18 @@ namespace JWCControlLib
         }
     }
 
+    public enum ComuIDType
+    {
+        [Description("无")]
+        None,
 
+        [Description("使用ID")]
+        ID,
 
+        [Description("使用Name")]
+        Name,
+
+        [Description("自定义")]
+        Custom
+    }
 }

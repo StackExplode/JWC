@@ -39,8 +39,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AJWCComunicator.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="IDataReciever.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JWCControlLib\JWCControlLib.csproj">
+      <Project>{3bd53ed8-0ec5-4f5d-b61b-44ff546e8d13}</Project>
+      <Name>JWCControlLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

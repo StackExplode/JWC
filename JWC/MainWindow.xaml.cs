@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,11 +23,36 @@ namespace JWC
         public MainWindow()
         {
             InitializeComponent();
+            com.OnDataReceived += com_OnDataReceived;
         }
 
+        TcpClient cl = null;
+        void com_OnDataReceived(object arg1, object arg2)
+        {
+            cl = (TcpClient)arg1;
+        }
+        NanjingComs.NJTCPServerCommunicator com = new NanjingComs.NJTCPServerCommunicator();
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            com.Initialization(9097);
+            com.Start();
+        }
+
+
+
+        private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            MessageBox.Show("F1!");
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            com.Stop(false);
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            com.SendDataTo(cl,new byte[] { 2, 3, 0xFF, 2 });
         }
     }
 }

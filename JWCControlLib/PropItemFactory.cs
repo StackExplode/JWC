@@ -19,6 +19,7 @@ namespace JWCControlLib
                 case CreatorPropType.Boolean: return new BoolPropItem(jc, pi,attr);
                 case CreatorPropType.Multi: return new MultiPropItem(jc, pi, attr);
                 case CreatorPropType.DialogWithText: return new DialogWithTextPropItem(jc, pi, attr);
+                case CreatorPropType.EnumDropDown: return new EnumDropdownPropItem(jc, pi, attr);
                 default:
                     throw new NotImplementedException("你没有实现这种CreatorPropType:" + type.ToString());
                     return null;

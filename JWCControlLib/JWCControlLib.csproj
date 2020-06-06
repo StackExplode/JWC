@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="BoolPropItem.cs" />
     <Compile Include="DialogWithTextPropItem.cs" />
+    <Compile Include="EnumDropdownPropItem.cs" />
     <Compile Include="ICusDialog.cs" />
     <Compile Include="IPropItem.cs" />
     <Compile Include="JWCControl.cs" />

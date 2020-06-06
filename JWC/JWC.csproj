@@ -90,6 +90,16 @@
     </None>
     <AppDesigner Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\JWCCommunicationLib\JWCCommunicationLib.csproj">
+      <Project>{95750721-33f7-49c7-bcb9-e9239ac1dadc}</Project>
+      <Name>JWCCommunicationLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanjingComs\NanjingComs.csproj">
+      <Project>{280e5e50-5e7c-460e-86dd-678c9c7bcc84}</Project>
+      <Name>NanjingComs</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
