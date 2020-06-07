@@ -402,6 +402,11 @@ namespace JWCControlLib
             }
             return null;
         }
+
+        public void CrossThreadTask(Action tsk)
+        {
+            this.Dispatcher.Invoke(tsk);
+        }
     }
 
     [Serializable]

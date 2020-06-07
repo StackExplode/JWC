@@ -52,6 +52,7 @@
     <Compile Include="ICusDialog.cs" />
     <Compile Include="IPropItem.cs" />
     <Compile Include="JWCControl.cs" />
+    <Compile Include="JWCControlFactory.cs" />
     <Compile Include="JWCSerializer.cs" />
     <Compile Include="MultiPropItem.cs" />
     <Compile Include="OpenFilePropDialog.cs" />

@@ -95,9 +95,17 @@
       <Project>{95750721-33f7-49c7-bcb9-e9239ac1dadc}</Project>
       <Name>JWCCommunicationLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\JWCControlLib\JWCControlLib.csproj">
+      <Project>{3bd53ed8-0ec5-4f5d-b61b-44ff546e8d13}</Project>
+      <Name>JWCControlLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NanjingComs\NanjingComs.csproj">
       <Project>{280e5e50-5e7c-460e-86dd-678c9c7bcc84}</Project>
       <Name>NanjingComs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NanjingControls\NanjingControls.csproj">
+      <Project>{4f964bb9-689a-4fff-a403-fd5f4be1f563}</Project>
+      <Name>NanjingControls</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

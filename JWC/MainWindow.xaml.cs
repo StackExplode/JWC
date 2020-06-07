@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using JWCControlLib;
 
 namespace JWC
 {
@@ -24,6 +25,7 @@ namespace JWC
         {
             InitializeComponent();
             com.OnDataReceived += com_OnDataReceived;
+            ca.SetCommunicator(com);
         }
 
         TcpClient cl = null;
@@ -32,6 +34,7 @@ namespace JWC
             cl = (TcpClient)arg1;
         }
         NanjingComs.NJTCPServerCommunicator com = new NanjingComs.NJTCPServerCommunicator();
+        NanjingComs.NanjingComAdapter ca = new NanjingComs.NanjingComAdapter();
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             com.Initialization(9097);
@@ -53,6 +56,15 @@ namespace JWC
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
             com.SendDataTo(cl,new byte[] { 2, 3, 0xFF, 2 });
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            NanjingControls.DunWei dw = new NanjingControls.DunWei();
+            dw.Size = new Size(160, 90);
+            (dw as JWCCommunicationLib.IDataReceiver).RecID = "2";
+            main_grid.Children.Add(dw);
+            ca.AppendReceiver(dw);
         }
     }
 }

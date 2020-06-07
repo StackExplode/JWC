@@ -49,6 +49,7 @@ namespace NanjingComs
 
         internal class RecState
         {
+            public NetworkStream Stream;
             public TcpClient Client;
             public byte[] Buffer;
         }
@@ -56,6 +57,7 @@ namespace NanjingComs
         internal class SendState
         {
             public TcpListener Client;
+            public NetworkStream Stream;
             public byte[] Buffer;
         }
 
@@ -69,7 +71,7 @@ namespace NanjingComs
             byte[] buff = new byte[client.Client.ReceiveBufferSize];
             NetworkStream ns = client.GetStream();
             ns.ReadTimeout = 10000;
-            RecState state = new RecState { Client = client, Buffer = buff };
+            RecState state = new RecState { Client = client, Buffer = buff, Stream = ns };
             ns.BeginRead(buff, 0, buff.Length, HandleClientAsyncRec, state);
 
         }
@@ -79,10 +81,21 @@ namespace NanjingComs
             RecState state = (RecState)res.AsyncState;
             TcpClient client = state.Client;
             byte[] oldbuff = state.Buffer;
+            NetworkStream ns = state.Stream;
+
             if (client == null || !client.Connected)
                 return;
-            NetworkStream ns = client.GetStream();
-            int b2r = ns.EndRead(res);
+
+            int b2r;
+            try
+            {
+                b2r = ns.EndRead(res);
+            }
+            catch(System.IO.IOException)
+            {
+                return;
+            }
+            
             if(client.Available > 0)
             {
                 throw new Exception("Data too long!");
@@ -95,6 +108,10 @@ namespace NanjingComs
                 {
                     ns.Close();
                     client.Close();
+                }
+                else
+                {
+                    ns.BeginRead(state.Buffer, 0, state.Buffer.Length, HandleClientAsyncRec, state);
                 }
                 if (OnDataReceived != null)
                     OnDataReceived(client, rt);
@@ -120,13 +137,19 @@ namespace NanjingComs
             byte[] buff = (byte[])data;
             TcpClient cl = (TcpClient)client;
             NetworkStream ns = cl.GetStream();
-            ns.BeginWrite(buff, 0, buff.Length, HandleSendDataEnd, ns);
+            ns.BeginWrite(buff, 0, buff.Length, HandleSendDataEnd, cl);
         }
 
         private void HandleSendDataEnd(IAsyncResult ar)
         {
-            NetworkStream ns = (NetworkStream)ar.AsyncState;
+            TcpClient client = (TcpClient)ar.AsyncState;
+            NetworkStream ns = client.GetStream();
             ns.EndWrite(ar);
+            if(CloseAfterSend)
+            {
+                ns.Close();
+                client.Close();
+            }
         }
 
         

@@ -130,10 +130,13 @@ namespace NanjingControls
         }
 
 
-        public void SetControlState(object obj)
+        public void SetControlState(CommunicationType type,object obj)
         {
-            bool b = (bool)obj;
-            this.IsUing = b;
+            if (type.HasFlag(CommunicationType.Boolean))
+            {
+                bool b = (bool)obj;
+                this.IsUing = b;
+            }
         }
 
         [PropDiscribe( CreatorPropType.Text,"发送ID","身为发送者的ID")]
@@ -142,6 +145,17 @@ namespace NanjingControls
         {
             get;
             set;
+        }
+
+
+        CommunicationType IDataCommunicator.ComType
+        {
+            get { return CommunicationType.Boolean; }
+        }
+
+        public Guid CustomTypeUID
+        {
+            get { throw new NotImplementedException(); }
         }
     }
 }

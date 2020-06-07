@@ -8,9 +8,9 @@ using System.IO;
 using System.Collections.Concurrent;
 using System.Reflection;
 
-namespace JWCCreator
+namespace JWCControlLib
 {
-    static class JWCControlFactory
+    public static class JWCControlFactory
     {
         private static volatile ConcurrentDictionary<string, Type> AllControls = new ConcurrentDictionary<string, Type>();
 
