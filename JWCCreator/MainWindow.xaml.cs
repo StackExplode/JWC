@@ -14,6 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 using JWCControlLib;
+using JWCCommunicationLib;
 using System.Collections.ObjectModel;
 
 namespace JWCCreator
@@ -26,16 +27,20 @@ namespace JWCCreator
         Stage stage;
         PropManager pm;
 
-        class ZMR
-        {
-            public ZMR(string s, int v)
-            {
-                Name = s;
-                Content = v;
-            }
-            public string Name { get; set; }
-            public int Content { get; set; }
-        }
+        JControlOutputData Communicator_Data = null;
+        JControlOutputData Adapter_Data = null;
+        string ComFname, AdaFname;
+
+        //class ZMR
+        //{
+        //    public ZMR(string s, int v)
+        //    {
+        //        Name = s;
+        //        Content = v;
+        //    }
+        //    public string Name { get; set; }
+        //    public int Content { get; set; }
+        //}
 
        
 
@@ -67,7 +72,9 @@ namespace JWCCreator
             //xx.Name = "ccc";
             //xx.Content = new ZMR("333", 103);
             //temp.Add(xx);
-            
+
+            Version ver = Assembly.GetExecutingAssembly().GetName().Version;
+            this.Title += "(" + ver.ToString(3) + ")";
 
         }
 
@@ -90,7 +97,7 @@ namespace JWCCreator
         private void JWCCMainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             JWCControlFactory.LoadLibs(AppDomain.CurrentDomain.BaseDirectory + "\\Controls");
-            
+            JWCCommunicationLib.JWCCommunicatorFactory.LoadLibs(AppDomain.CurrentDomain.BaseDirectory + "\\Communicators");
         }
 
 
@@ -196,11 +203,19 @@ namespace JWCCreator
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            stage.ClearAll(800, 600);
+            Communicator_Data = null;
+            Adapter_Data = null;
+            fm_new fm = new fm_new();
+            fm.OnConfirmNew += (w, h) => { stage.ClearAll(w, h); };
+            fm.Owner = this;
+            fm.ShowDialog();
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+            System.Windows.MessageBoxResult dr = MessageBox.Show("确认删除控件吗？", "询问", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            if (dr != MessageBoxResult.Yes)
+                return;
             stage.RemoveSelecting();
         }
 
@@ -224,5 +239,133 @@ namespace JWCCreator
             Button_Click_2(null, null);
           
         }
+
+        private void Button_Click_5(object sender, RoutedEventArgs e)
+        {
+            stage.UnSelectControl();
+        }
+
+        private void Button_Click_6(object sender, RoutedEventArgs e)
+        {
+            stage.CopySelecting();
+        }
+
+        private void Button_Click_7(object sender, RoutedEventArgs e)
+        {
+            stage.PasteSelecting();
+        }
+        fm_addctrl fm_add;
+        private void Button_Click_add(object sender, RoutedEventArgs e)
+        {
+            if (fm_add == null)
+            {
+                fm_add = new fm_addctrl();
+                fm_add.Owner = this;
+                fm_add.ShowActivated = true;
+                fm_add.Closed += (ss, ee) => { fm_add = null; };
+                fm_add.OnConfirmAdd += (jc) => {
+                    jc.Margin = new Thickness(scrollv1.HorizontalOffset / scale1.ScaleX, scrollv1.VerticalOffset/scale1.ScaleY, 0, 0);
+                    stage.AddControl(jc); 
+                };
+            }
+            else
+                fm_add.Focus();
+                
+            fm_add.Show();
+            
+        }
+
+        private void Button_Click_8(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.SaveFileDialog sv = new System.Windows.Forms.SaveFileDialog();
+            sv.Filter = "JWC工程文件|*.jwc";
+            System.Windows.Forms.DialogResult dr = sv.ShowDialog();
+            if (dr != System.Windows.Forms.DialogResult.OK)
+                return;
+
+            SLHelper sl = new SLHelper(stage, Communicator_Data, Adapter_Data);
+            sl.ComFname = ComFname;
+            sl.AdaFname = AdaFname;
+            sl.SaveFile(sv.FileName);
+        }
+
+        private void Button_Click_9(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.OpenFileDialog op = new System.Windows.Forms.OpenFileDialog();
+            op.Filter = "JWC工程文件|*.jwc";
+            System.Windows.Forms.DialogResult dr = op.ShowDialog();
+            if (dr != System.Windows.Forms.DialogResult.OK)
+                return;
+
+            SLHelper sl = new SLHelper(stage, null, null);
+            sl.LoadFile(op.FileName);
+            Communicator_Data = sl.commu;
+            Adapter_Data = sl.adapter;
+            ComFname = sl.ComFname;
+            AdaFname = sl.AdaFname;
+        }
+
+        private void Btn_ComWiz_Clicked(object sender, RoutedEventArgs e)
+        {
+            fm_comsetting fm = new fm_comsetting();
+            fm.Owner = this;
+            fm.SetData(Communicator_Data, Adapter_Data,ComFname,AdaFname);
+            fm.OnFinished += fm_OnFinished;
+            fm.ShowDialog();
+        }
+
+        void fm_OnFinished(JControlOutputData comdata, JControlOutputData adadata,string f1,string f2)
+        {
+            Communicator_Data = comdata;
+            Adapter_Data = adadata;
+            ComFname = f1;
+            AdaFname = f2;
+        }
+
+        private void Btn_PageSet_Click(object sender, RoutedEventArgs e)
+        {
+            fm_gridsetting fm = new fm_gridsetting(stage);
+            fm.Owner = this;
+            fm.ShowDialog();
+        }
+
+        private void Zoomout_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Button_Click_3(null, null);
+        }
+
+        private void Zoomrst_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Button_Click_4(null, null);
+        }
+
+        private void Dele_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Button_Click_1(null, null);
+        }
+
+        private void Copy_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Button_Click_6(null, null);
+        }
+
+        private void Paste_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Button_Click_7(null, null);
+        }
+
+        private void Add_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            Button_Click_add(null, null);
+        }
+
+        private void Button_Click_10(object sender, RoutedEventArgs e)
+        {
+            fm_about fm = new fm_about();
+            fm.Owner = this;
+            fm.ShowDialog();
+        }
+
+
     }
 }

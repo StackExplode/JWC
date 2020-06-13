@@ -20,6 +20,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -40,9 +41,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AJWCComunicator.cs" />
-    <Compile Include="Class1.cs" />
     <Compile Include="IDataReciever.cs" />
     <Compile Include="IJWCCAdaptor.cs" />
+    <Compile Include="JWCCommunicatorFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

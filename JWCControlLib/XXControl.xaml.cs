@@ -29,7 +29,7 @@ namespace JWCControlLib
             InitializeComponent();
             //base.BindSelector(board1);
             base.BindMainGrid(grid1);
-
+            this.Height = this.Width = 350;
         }
 
 

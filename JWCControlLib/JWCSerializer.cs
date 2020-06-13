@@ -99,16 +99,22 @@ namespace JWCControlLib
     }
 
     [Serializable]
-    public class  ClassBase1
+    public class  JWCSaveFile
     {
-        [DataMember]
-        public int BaseInt1 { get; set; }
+        public List<JControlOutputData> AllControls;
+        public JControlOutputData Communicator;
+        public JControlOutputData ComAdapter;
+        public string ComName;
+        public string AdaName;
+        public object[] Parameters;
+        public int Height;
+        public int Width;
+        public string BackGroundPic;
+        public bool BgUsePic;
+        public byte[] BackColor;
+        public Version Version;
+      
     }
 
-    [Serializable]
-    public class ClassInherit1:ClassBase1
-    {
-        public System.Drawing.Color cl { get; set; }
-        public int ChildInt1 { get; set; }
-    }
+   
 }

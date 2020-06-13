@@ -24,7 +24,7 @@ namespace JWCControlLib
         private APropItem[] _SubItems;
 
 
-        public MultiPropItem(JWCControl jc,PropertyInfo pi,PropDiscribeAttribute attr)
+        public MultiPropItem(IPropGWAble jc, PropertyInfo pi, PropDiscribeAttribute attr)
         {
             _Ctrl = jc;
             _PI = pi;
@@ -67,7 +67,7 @@ namespace JWCControlLib
         }
 
 
-        void itm_OnPropValueChanged(APropItem sender, JWCControl setee, PropertyInfo pi, object value)
+        void itm_OnPropValueChanged(APropItem sender, IPropGWAble setee, PropertyInfo pi, object value)
         {
             int index = (int)sender.AttrParam;
             _Values[index] = value;

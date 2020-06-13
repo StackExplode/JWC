@@ -23,6 +23,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -61,9 +62,47 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ComAdPropManager.cs" />
+    <Compile Include="ExternalBrowserHyperlink.cs" />
+    <Compile Include="fm_about.xaml.cs">
+      <DependentUpon>fm_about.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="fm_addctrl.xaml.cs">
+      <DependentUpon>fm_addctrl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="fm_comsetting.xaml.cs">
+      <DependentUpon>fm_comsetting.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="fm_gridsetting.xaml.cs">
+      <DependentUpon>fm_gridsetting.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="fm_new.xaml.cs">
+      <DependentUpon>fm_new.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PropManager.cs" />
+    <Compile Include="SLHelper.cs" />
     <Compile Include="Stage.cs" />
     <Compile Include="UtilExtends.cs" />
+    <Page Include="fm_about.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="fm_addctrl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="fm_comsetting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="fm_gridsetting.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="fm_new.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -103,9 +142,17 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\JWCCommunicationLib\JWCCommunicationLib.csproj">
+      <Project>{95750721-33f7-49c7-bcb9-e9239ac1dadc}</Project>
+      <Name>JWCCommunicationLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\JWCControlLib\JWCControlLib.csproj">
       <Project>{3bd53ed8-0ec5-4f5d-b61b-44ff546e8d13}</Project>
       <Name>JWCControlLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JWC\JWC.csproj">
+      <Project>{bae94e95-5ebe-45cc-bea0-9bfbb671e165}</Project>
+      <Name>JWC</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +241,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\wmsui32_EXCLAMATION.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\plus1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\plus2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\select1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -20,7 +20,7 @@ namespace JWCControlLib
         protected object OldVal;
         public object CurrValue { get; private set; }
 
-        public DialogWithTextPropItem(JWCControl jc,PropertyInfo pi,PropDiscribeAttribute attr)
+        public DialogWithTextPropItem(IPropGWAble jc, PropertyInfo pi, PropDiscribeAttribute attr)
         {
             _Ctrl = jc;
             _PI = pi;
@@ -49,7 +49,7 @@ namespace JWCControlLib
             _Btn = new Button();
             _Btn.VerticalAlignment = VerticalAlignment.Center;
             lbl.VerticalAlignment = _Txtbox.VerticalAlignment = VerticalAlignment.Center;
-            
+            _Txtbox.TextWrapping = TextWrapping.NoWrap;
             _Txtbox.IsReadOnly = true;
             dp.Children.Add(lbl);
             dp.Children.Add(_Btn);

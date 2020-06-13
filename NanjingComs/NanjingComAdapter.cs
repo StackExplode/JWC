@@ -9,36 +9,37 @@ using System.Collections.Concurrent;
 
 namespace NanjingComs
 {
-    public class NanjingComAdapter:IJWCCAdaptor
+    [JWCAdapterDesc("南京通信适配器","用于南京厕所项目的通信适配器，配合蹲位等控件使用")]
+    public class NanjingComAdapter:AJWCCAdaptor
     {
 
         ConcurrentDictionary<string,IDataSender> _Senders = new ConcurrentDictionary<string,IDataSender>();
         ConcurrentDictionary<string, IDataReceiver> _Receivers = new ConcurrentDictionary<string, IDataReceiver>();
 
-        public void AppendSender(IDataSender ctrl)
+        public override void AppendSender(IDataSender ctrl)
         {
             _Senders[ctrl.SendID] = ctrl;
-            ctrl.OnControlStateChanged += ctrl_OnControlStateChanged;
+            ctrl.OnRegisterChanged += ctrl_OnControlStateChanged;
         }
 
-        void ctrl_OnControlStateChanged(object sender,CommunicationType type, object val)
+        void ctrl_OnControlStateChanged(object sender,string dest,string key, object val)
         {
             throw new NotImplementedException("南京项目不需要外发数据");
         }
 
-        public void AppendReceiver(IDataReceiver ctrl)
+        public override void AppendReceiver(IDataReceiver ctrl)
         {
             _Receivers[ctrl.RecID] = ctrl;
         }
 
-        public AJWCComunicator Communicator
+        public override AJWCComunicator Communicator
         {
             get;
             set;
         }
 
 
-        public void SetCommunicator(AJWCComunicator com)
+        public override void SetCommunicator(AJWCComunicator com)
         {
             Communicator = com;
             com.OnDataReceived += com_OnDataReceived;
@@ -52,19 +53,22 @@ namespace NanjingComs
         void com_OnDataReceived(object arg1, object arg2)
         {
             byte[] buff = (byte[])arg2;
+            IDataReceiver jc = null;
             string id = ConvertID(buff[0]);
-            var jc = _Receivers[id];
-            if (jc == null)
+            bool zonzai = _Receivers.TryGetValue(id, out jc);
+            if (zonzai == false || jc == null)
                 return;
-            if (jc.ComType == CommunicationType.Boolean)
+            string regid = buff[1].ToString();
+            if (jc.GetRegisterType(regid) == RegisterType.Boolean)
             {
                 ((JWCControl)jc).CrossThreadTask(
-                        () =>
-                        {
-                            jc.SetControlState(CommunicationType.Boolean, buff[1] == 0 ? false : true);
-                        }
-                    );
+                    () =>
+                    {
+                        jc.SetRegister(regid, buff[2] == 0 ? false : true);
+                    });
             }
+                
+        
                 
         }
     }

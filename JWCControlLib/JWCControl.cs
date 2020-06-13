@@ -9,8 +9,9 @@ using System.Windows.Input;
 
 namespace JWCControlLib
 {
-    public abstract class JWCControl : System.Windows.Controls.UserControl
+    public abstract class JWCControl : System.Windows.Controls.UserControl, IPropGWAble
     {
+        
         internal enum MouseState { Up, MoveDown, ResizeDown }
 
         private MouseState Mousedown;
@@ -38,14 +39,21 @@ namespace JWCControlLib
             set { base.Name = value; }
         }
 
+        public virtual void Init(bool iseditmode)
+        {
 
-        
+        }
+
+        public virtual void DeInit(bool iseditmode)
+        {
+
+        }
 
         public string PropDispName
         {
             get
             {
-                string fn = this.GetType().FullName;
+                string fn = this.FullName;
                 string name = string.IsNullOrEmpty(this.Name) ? "[无名称]" : this.Name;
                 return name + "(" + fn + ")";
             }
@@ -98,50 +106,65 @@ namespace JWCControlLib
             };
         }
 
-        public void SetProp(PropertyInfo pi, object val)
+        public static void SetProp(object obj,PropertyInfo pi, object val)
         {
             if (Attribute.IsDefined(pi, typeof(RedirectGSAttribute)))
             {
                 object[] attrs = pi.GetCustomAttributes(typeof(RedirectGSAttribute), true);
                 RedirectGSAttribute attr = (RedirectGSAttribute)attrs[0];
-                var meth = this.GetType().GetMethod(attr.Fun, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
-                meth.Invoke(this, new object[] { true, val });
+                var meth = obj.GetType().GetMethod(attr.Fun, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+                meth.Invoke(obj, new object[] { true, val });
             }
             else
-                pi.SetValue(this, val, null);
+                pi.SetValue(obj, val, null);
+        }
+
+        public void SetProp(PropertyInfo pi, object val)
+        {
+            SetProp(this, pi, val);
+        }
+
+        public static object GetProp(object obj,PropertyInfo pi)
+        {
+            if (Attribute.IsDefined(pi, typeof(RedirectGSAttribute)))
+            {
+                object[] attrs = pi.GetCustomAttributes(typeof(RedirectGSAttribute), true);
+                RedirectGSAttribute attr = (RedirectGSAttribute)attrs[0];
+                var meth = obj.GetType().GetMethod(attr.Fun, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
+                object val = meth.Invoke(obj, new object[] { false, null });
+                return val;
+            }
+            else
+                return pi.GetValue(obj, null);
         }
 
         public object GetProp(PropertyInfo pi)
         {
-            if (Attribute.IsDefined(pi, typeof(RedirectGSAttribute)))
-            {
-                object[] attrs = pi.GetCustomAttributes(typeof(RedirectGSAttribute), true);
-                RedirectGSAttribute attr = (RedirectGSAttribute)attrs[0];
-                var meth = this.GetType().GetMethod(attr.Fun, BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance | BindingFlags.FlattenHierarchy);
-                object val = meth.Invoke(this, new object[] { false, null });
-                return val;
-            }
-            else
-                return pi.GetValue(this, null);
+            return GetProp(this, pi);
         }
 
-        public JControlOutputData OutputProperty()
+        public static JControlOutputData OutputProperty(object obj)
         {
             JControlOutputData rst = new JControlOutputData();
-            PropertyInfo[] pis = this.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+            PropertyInfo[] pis = obj.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
             foreach (PropertyInfo pi in pis)
             {
                 if (Attribute.IsDefined(pi, typeof(OutputableAttribute)))
                 {
-                    rst.Add(pi.Name, GetProp(pi));
+                    rst.Add(pi.Name, GetProp(obj,pi));
                 }
             }
             return rst;
         }
 
-        public void InputProperty(JControlOutputData dic)
+        public JControlOutputData OutputProperty()
         {
-            PropertyInfo[] pis = this.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+            return OutputProperty(this);
+        }
+
+        public static void InputProperty(object obj,JControlOutputData dic)
+        {
+            PropertyInfo[] pis = obj.GetType().GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
             foreach (PropertyInfo pi in pis)
             {
                 if (Attribute.IsDefined(pi, typeof(OutputableAttribute)))
@@ -150,9 +173,24 @@ namespace JWCControlLib
                     if (dic.ContainsKey(pi.Name))
                     {
                         val = dic[pi.Name];
-                        SetProp(pi, val);
+                        SetProp(obj,pi, val);
                     }
                 }
+            }
+        }
+
+        public void InputProperty(JControlOutputData dic)
+        {
+            InputProperty(this, dic);
+        }
+
+        [Outputable]
+        public string FullName
+        {
+            set { return; }
+            get
+            {
+                return this.GetType().FullName;
             }
         }
 
@@ -171,12 +209,21 @@ namespace JWCControlLib
             }
         }
 
+        [PropDiscribe(CreatorPropType.Text,"Tag","控件附加的自定义信息")]
+        [Outputable]
+        public new object Tag
+        { 
+            get { return base.Tag; }
+            set { base.Tag = value; }
+        }
+
         [PropDiscribe(CreatorPropType.Multi,"位置","设置控件的位置，一般只有左和上有效")]
         [SubProp(CreatorPropType.Text, "左", "控件到左边的距离", 0)]
         [SubProp(CreatorPropType.Text, "上", "控件到上边的距离", 1)]
         [SubProp(CreatorPropType.Text, "右", "控件到右边的距离，系统优先考虑左边距离", 2)]
         [SubProp(CreatorPropType.Text, "下", "控件到下边的距离，系统优先考虑上边距离", 3)]
         [RedirectGS("GSR_Margin")]
+        [Outputable]
         public new Thickness Margin
         {
             get { return base.Margin; }
@@ -206,6 +253,7 @@ namespace JWCControlLib
         [SubProp(CreatorPropType.Text, "宽度", "控件的宽度", 0)]
         [SubProp(CreatorPropType.Text, "高度", "控件的高度", 1)]
         [RedirectGS("GSR_Size")]
+        [Outputable]
         public Size Size
         {
             get { return new Size(base.Width, base.Height); }
@@ -415,6 +463,7 @@ namespace JWCControlLib
         public JControlOutputData()
             : base()
         {
+      
         }
 
         protected JControlOutputData(SerializationInfo info, StreamingContext context)

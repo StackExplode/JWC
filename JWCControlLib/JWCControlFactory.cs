@@ -33,6 +33,11 @@ namespace JWCControlLib
             }
         }
 
+        public static ConcurrentDictionary<string, Type> GetAllControls()
+        {
+            return AllControls;
+        }
+
         public static JWCControl CreateInstance(string fullname)
         {
             JWCControl rt = null;

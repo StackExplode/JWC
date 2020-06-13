@@ -10,7 +10,7 @@ using System.Windows.Controls;
 
 namespace JWCControlLib
 {
-    public delegate void OnPropValueChangedDele(APropItem sender,JWCControl setee,PropertyInfo pi,object value);
+    public delegate void OnPropValueChangedDele(APropItem sender,IPropGWAble setee,PropertyInfo pi,object value);
     public abstract class APropItem
     {
         public abstract event OnPropValueChangedDele OnPropValueChanged;
@@ -20,7 +20,7 @@ namespace JWCControlLib
         public abstract void ResumeValue();
         public bool AutoSet { get; set; }
         public object AttrParam { get { return _Attr.Param; } }
-        protected JWCControl _Ctrl;
+        protected IPropGWAble _Ctrl;
         protected PropertyInfo _PI;
         protected string _HelpString;
         protected PropDiscribeAttribute _Attr;

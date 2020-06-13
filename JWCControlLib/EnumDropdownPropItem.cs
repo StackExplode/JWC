@@ -19,7 +19,7 @@ namespace JWCControlLib
         int _oldIndex;
         ComboBox _Comb;
 
-        public EnumDropdownPropItem(JWCControl jc, PropertyInfo pi, PropDiscribeAttribute attr)
+        public EnumDropdownPropItem(IPropGWAble jc, PropertyInfo pi, PropDiscribeAttribute attr)
         {
             _Ctrl = jc;
             _PI = pi;

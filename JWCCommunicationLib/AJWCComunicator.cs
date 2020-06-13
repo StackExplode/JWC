@@ -7,11 +7,11 @@ using System.Text;
 
 namespace JWCCommunicationLib
 {
-    public abstract class AJWCComunicator:IDisposable
+    public abstract class AJWCComunicator:IDisposable,IPropGWAble
     {
         public bool IsRunning { get; protected set; }
         public abstract event Action<object, object> OnDataReceived;
-        public abstract void Initialization(params object[] pars);
+        public abstract void Initialization();
         public abstract void Start();
         public abstract void Stop(bool abort);
         public abstract void SendDataTo(object client,object data);
@@ -19,6 +19,7 @@ namespace JWCCommunicationLib
         {
 
         }
+        public abstract bool ComAvaliable { get; }
         public void SetProp(PropertyInfo pi, object val)
         {
             if (Attribute.IsDefined(pi, typeof(RedirectGSAttribute)))
@@ -79,7 +80,7 @@ namespace JWCCommunicationLib
 
         public virtual void Dispose()
         {
-            Stop(true);
+            this.Stop(true);
         }
 }
 }

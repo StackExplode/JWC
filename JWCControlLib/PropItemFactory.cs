@@ -10,7 +10,7 @@ namespace JWCControlLib
 {
     public static class PropItemFactory
     {
-        public static APropItem GetPropItem(PropDiscribeAttribute attr,JWCControl jc,PropertyInfo pi)
+        public static APropItem GetPropItem(PropDiscribeAttribute attr,IPropGWAble jc,PropertyInfo pi)
         {
             var type = attr.ShowType;
             switch(type)

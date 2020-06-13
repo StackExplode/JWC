@@ -19,6 +19,47 @@ namespace JWCControlLib
             Fun = fun;
         }
     }
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    public class JWCControlDescAttribute : Attribute
+    {
+        public string FriendlyName { get; private set; }
+        public string Description { get; private set; }
+
+        //public Func<object, bool, object,object> Func;
+        public JWCControlDescAttribute(string fname,string des="")
+        {
+            FriendlyName = fname;
+            Description = des;
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    public class JWCCommDescAttribute : Attribute
+    {
+        public string FriendlyName { get; private set; }
+        public string Description { get; private set; }
+
+        //public Func<object, bool, object,object> Func;
+        public JWCCommDescAttribute(string fname, string des = "")
+        {
+            FriendlyName = fname;
+            Description = des;
+        }
+    }
+
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
+    public class JWCAdapterDescAttribute : Attribute
+    {
+        public string FriendlyName { get; private set; }
+        public string Description { get; private set; }
+
+        //public Func<object, bool, object,object> Func;
+        public JWCAdapterDescAttribute(string fname, string des = "")
+        {
+            FriendlyName = fname;
+            Description = des;
+        }
+    }
 
     public enum CreatorPropType
     {

@@ -18,7 +18,7 @@ using System.Collections.ObjectModel;
 
 namespace JWCCreator
 {
-    class Stage : IDisposable
+    public class Stage : IDisposable
     {
         private Grid grid_main;
         private JWCControl _Selecting_Ctrl = null;
@@ -33,6 +33,14 @@ namespace JWCCreator
         public event Action<object, double, double> OnSelectedCtrlResized;
         public JWCControl SelectedControl { get { return _Selecting_Ctrl; } }
 
+        JWCControl _ClipBoard;
+
+        public UIElementCollection AllControls { get { return grid_main.Children; } }
+        public Grid MainStage { get { return grid_main; } }
+        public string BgFilename { get; private set; }
+        public bool BgUsePic { get; private set; }
+        public Color BgColor { get; private set; }
+
         public Stage(Grid grd,ScrollViewer sv,ScaleTransform sc,ComboBox cbx)
         {
             _Scaller = sc;
@@ -41,7 +49,50 @@ namespace JWCCreator
             _CombAll = cbx;
             _CombAll.ItemsSource = AllCtrls;
             grab_cur = new Cursor(new System.IO.MemoryStream(Properties.Resources.Grab));
+            BgUsePic = false;
+            BgColor = Colors.White;
             Initialization();
+        }
+
+        public void SetBg(bool b,Color cl,string fn)
+        {
+            BgUsePic = b;
+            if(!b)
+            {
+                BgColor = cl;
+                grid_main.Background = new SolidColorBrush(cl);
+            }
+            else
+            {
+                BgFilename = fn;
+                fn = System.IO.Path.GetFullPath(fn);
+                ImageBrush br = new ImageBrush();
+                br.Stretch = Stretch.Fill;
+                br.ImageSource = new BitmapImage(new Uri(fn));
+                grid_main.Background = br;
+            }
+        }
+
+        public void CopySelecting()
+        {
+            if (_Selecting_Ctrl == null)
+                return;
+            _ClipBoard = _Selecting_Ctrl;
+        }
+
+        public void PasteSelecting()
+        {
+            if (_ClipBoard == null)
+                return;
+            JWCControl jc = (JWCControl)Activator.CreateInstance(_ClipBoard.GetType());
+            jc.InputProperty(_ClipBoard.OutputProperty());
+            jc.IsEditMode = true;
+            double left = jc.Margin.Left + 20;
+            double top = jc.Margin.Top + 20;
+            Thickness th = new Thickness((int)left, (int)top, 0, 0);
+            jc.Margin = th;
+            AddControl(jc);
+            jc.GetFocus();
         }
 
         private void Initialization()
@@ -66,10 +117,13 @@ namespace JWCCreator
             grid_main.Width = w;
             grid_main.Height = h;
             grid_main.Background = new SolidColorBrush(Colors.White);
+            BgUsePic = false;
+            BgFilename = "";
+            BgColor = Colors.White;
             ZoomReset();
         }
 
-        private void UnSelectControl()
+        public void UnSelectControl()
         {
             if (_Selecting_Ctrl != null)
                 _Selecting_Ctrl.LoseFocus();
@@ -173,7 +227,7 @@ namespace JWCCreator
                 double diffOffsetX = pTemp.X - Drag_Start_X;
                 ctrl.ScrollToVerticalOffset(Drag_Offset_Y - diffOffsetY);
                 ctrl.ScrollToHorizontalOffset(Drag_Offset_X - diffOffsetX);
-
+                
             }
         }
 

@@ -10,6 +10,7 @@ using JWCControlLib;
 
 namespace NanjingComs
 {
+    [JWCCommDesc("TCP Server通信器","仅供测试的TCP服务器类型通信器，监听本机设置的端口，从机主动连接并交换数据")]
     public class NJTCPServerCommunicator:AJWCComunicator
     {
 
@@ -17,10 +18,22 @@ namespace NanjingComs
 
         protected int _Port;
         protected TcpListener _Listener;
+        private bool _Running = false;
 
-        [PropDiscribe(CreatorPropType.Text,"监听端口","作为服务器监听的本地端口")]
+        [PropDiscribe(CreatorPropType.Text,"监听端口","作为服务器监听的本地端口，其是一个1~65535的整数")]
         [Outputable]
-        public int Port { get; set; }
+        public int Port {
+            get
+            {
+                return _Port;
+            }
+            set
+            {
+                if (value < 1 || value > 65535)
+                    throw new Exception("设置端口号必须介于1~65535");
+                _Port = value;
+            }
+        }
 
         [PropDiscribe(CreatorPropType.Text, "最大连接数", "允许同时连接的最大客户端数量")]
         [Outputable]
@@ -38,11 +51,12 @@ namespace NanjingComs
         {
             CloseAfterSend = CloseAfterRec = false;
             MaxClient = 100;
+            Port = 6666;
         }
 
-        public override void Initialization(params object[] pars)
+        public override void Initialization()
         {
-            _Port = (int)pars[0];
+            //_Port = (int)pars[0];
             _Listener = new TcpListener(IPAddress.Any,_Port);
             
         }
@@ -54,12 +68,12 @@ namespace NanjingComs
             public byte[] Buffer;
         }
 
-        internal class SendState
-        {
-            public TcpListener Client;
-            public NetworkStream Stream;
-            public byte[] Buffer;
-        }
+        //internal class SendState
+        //{
+        //    public TcpListener Client;
+        //    public NetworkStream Stream;
+        //    public byte[] Buffer;
+        //}
 
         private void HandleAsyncConnection(IAsyncResult res)
         {
@@ -120,15 +134,20 @@ namespace NanjingComs
 
         public override void Start()
         {
+            if (_Running)
+                return;
             _Listener.Start(MaxClient);
             _Listener.BeginAcceptTcpClient(HandleAsyncConnection, _Listener);
+            _Running = true;
         }
 
         public override void Stop(bool abort=false)
         {
+            if (_Running == false)
+                return;
             if(_Listener.Server.IsBound)
                 _Listener.Stop();
-       
+            _Running = false;
         }
 
         public override void SendDataTo(object client,object data)
@@ -136,6 +155,8 @@ namespace NanjingComs
             _Listener.Server.SendTimeout = 10000;
             byte[] buff = (byte[])data;
             TcpClient cl = (TcpClient)client;
+            if (!cl.Connected)
+                return;
             NetworkStream ns = cl.GetStream();
             ns.BeginWrite(buff, 0, buff.Length, HandleSendDataEnd, cl);
         }
@@ -152,6 +173,14 @@ namespace NanjingComs
             }
         }
 
-        
+
+
+        public override bool ComAvaliable
+        {
+            get 
+            {
+                return true;
+            }
+        }
     }
 }

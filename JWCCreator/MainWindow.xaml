@@ -3,16 +3,22 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:jcl="clr-namespace:JWCControlLib;assembly=JWCControlLib"
         xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" x:Name="JWCCMainWindow" x:Class="JWCCreator.MainWindow"
-        Title="MainWindow" Height="703" Width="1260" Loaded="JWCCMainWindow_Loaded" WindowStyle="ThreeDBorderWindow" MinHeight="355" MinWidth="630">
-    
+        Title="JWC Creator" Height="703" Width="1260" Loaded="JWCCMainWindow_Loaded" WindowStyle="ThreeDBorderWindow" MinHeight="355" MinWidth="630">
+
     <Window.Resources>
         <RoutedUICommand x:Key="zoomincmd"></RoutedUICommand>
+        <RoutedUICommand x:Key="zoomoutcmd"></RoutedUICommand>
+        <RoutedUICommand x:Key="zoomrstcmd"></RoutedUICommand>
+        <RoutedUICommand x:Key="delcmd"></RoutedUICommand>
+        <RoutedUICommand x:Key="copycmd"></RoutedUICommand>
+        <RoutedUICommand x:Key="pastecmd"></RoutedUICommand>
+        <RoutedUICommand x:Key="addcmd"></RoutedUICommand>
         <ControlTemplate x:Key="DetailedTemplate" TargetType="{x:Type ContentControl}">
             <Grid>
                 <Rectangle x:Name="background" Fill="White" />
                 <TextBlock x:Name="ttt" Text="{Binding PropDispName}" FontSize="12"/>
             </Grid>
-            
+
             <ControlTemplate.Triggers>
                 <DataTrigger Binding="{Binding ElementName=ttt,Path=IsMouseOver}" Value="True">
                     <Setter Property="Fill" Value="Blue" TargetName="background"/>
@@ -23,12 +29,24 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
     </Window.Resources>
-   
+
     <Window.InputBindings>
-        <KeyBinding Modifiers="Control"  Key="Add" Command="{StaticResource zoomincmd}"/>
+        <KeyBinding   Key="Add" Command="{StaticResource zoomincmd}"/>
+        <KeyBinding   Key="Subtract" Command="{StaticResource zoomoutcmd}"/>
+        <KeyBinding   Key="Multiply" Command="{StaticResource zoomrstcmd}"/>
+        <KeyBinding   Key="Delete" Command="{StaticResource delcmd}"/>
+        <KeyBinding Modifiers="Control"  Key="C" Command="{StaticResource copycmd}"/>
+        <KeyBinding Modifiers="Control"  Key="V" Command="{StaticResource pastecmd}"/>
+        <KeyBinding Modifiers="Control"  Key="W" Command="{StaticResource addcmd}"/>
     </Window.InputBindings>
     <Window.CommandBindings>
         <CommandBinding Command="{StaticResource zoomincmd}" Executed="CommandBinding_Executed"></CommandBinding>
+        <CommandBinding Command="{StaticResource zoomoutcmd}" Executed="Zoomout_Executed"></CommandBinding>
+        <CommandBinding Command="{StaticResource zoomrstcmd}" Executed="Zoomrst_Executed"></CommandBinding>
+        <CommandBinding Command="{StaticResource delcmd}" Executed="Dele_Executed"></CommandBinding>
+        <CommandBinding Command="{StaticResource copycmd}" Executed="Copy_Executed"></CommandBinding>
+        <CommandBinding Command="{StaticResource pastecmd}" Executed="Paste_Executed"></CommandBinding>
+        <CommandBinding Command="{StaticResource addcmd}" Executed="Add_Executed"></CommandBinding>
     </Window.CommandBindings>
     <DockPanel LastChildFill="True" Background="#FFDEDEDE">
         <ToolBarPanel DockPanel.Dock="Top" Height="32" HorizontalAlignment="Left">
@@ -38,67 +56,83 @@
                         <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/312321_01.jpg" />
                     </Button.Background>
                 </Button>
-                <Button Width="24" Height="24"  Style="{StaticResource {x:Type Button}}" >
+                <Button Width="24" Height="24"  Style="{StaticResource {x:Type Button}}" Click="Button_Click_9" ToolTip="打开工程(Ctrl+O)">
                     <Button.Background>
                         <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/312321_02.gif" />
                     </Button.Background>
                 </Button>
-                <Button Width="24" Height="24"  Style="{StaticResource {x:Type Button}}" >
+                <Button Width="24" Height="24"  Style="{StaticResource {x:Type Button}}" Click="Button_Click_8" ToolTip="保存工程(Ctrl+S)" >
                     <Button.Background>
                         <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/312321_03.gif" />
                     </Button.Background>
                 </Button>
                 <Separator/>
-                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}" Content="+" Click="Button_Click_1" >
-             
+                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  Click="Button_Click_add" ToolTip="添加控件(Ctrl+W)" >
+                    <Button.Background>
+                        <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/plus2.png" />
+                    </Button.Background>
                 </Button>
                 <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  Click="Button_Click_1" >
                     <Button.Background>
                         <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/de.png" />
                     </Button.Background>
                 </Button>
-                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  Click="Button_Click_1" >
+                <Button  Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  Click="Button_Click_5" ToolTip="取消选中" >
+                    <Button.Background>
+                        <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/select1.png" />
+                    </Button.Background>
+                </Button>
+                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  Click="Button_Click_6" >
                     <Button.Background>
                         <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/312321_08.gif" />
                     </Button.Background>
                 </Button>
-                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  Click="Button_Click_1" >
+                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  Click="Button_Click_7" >
                     <Button.Background>
                         <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/312321_09.gif" />
                     </Button.Background>
                 </Button>
                 <Separator />
-                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  Click="Button_Click_2" ToolTip="放大(Ctrl+=)" >
+                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  Click="Button_Click_2" ToolTip="放大(Num+)" >
                     <Button.Background>
                         <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/zoomin.jpg" />
                     </Button.Background>
                 </Button>
-                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  Click="Button_Click_3" ToolTip="缩小(Ctrl+-)" >
+                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  Click="Button_Click_3" ToolTip="缩小(Num-)" >
                     <Button.Background>
                         <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/zoomout.jpg" />
                     </Button.Background>
                 </Button>
-                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  Click="Button_Click_4" ToolTip="恢复缩放(Ctrl+\)" >
+                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  Click="Button_Click_4" ToolTip="恢复缩放(Num*)" >
                     <Button.Background>
                         <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/rezoom.ico" />
                     </Button.Background>
                 </Button>
                 <Separator />
-                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  >
+                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}" ToolTip="ID重复性检查（开发中）" IsEnabled="False"  >
+                    <Button.Background>
+                        <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/312321_05.gif" />
+                    </Button.Background>
+                </Button>
+                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}" Click="Btn_PageSet_Click" ToolTip="页面设置" >
                     <Button.Background>
                         <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/comdlg32_528.ico" />
                     </Button.Background>
                 </Button>
-                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  >
+                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}" Click="Btn_ComWiz_Clicked" ToolTip="通信设置向导" >
                     <Button.Background>
                         <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/msnp32_WRKGRP_ICON.ico" />
                     </Button.Background>
                 </Button>
-                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}"  >
+                <Button Width="24" Height="24" Style="{StaticResource {x:Type Button}}" ToolTip="关于" Click="Button_Click_10"  >
                     <Button.Background>
                         <ImageBrush ImageSource="pack://application:,,,/JWCCreator;Component/Resources/wmsui32_EXCLAMATION.ico" />
                     </Button.Background>
                 </Button>
+                <Grid>
+
+                </Grid>
+              <!--
                 <RadioButton ToolTip="Red" Click="ColorButton_Click" Tag="1">
                     <Rectangle Width="10" Height="10" Fill="Red"/>
                 </RadioButton>
@@ -120,6 +154,8 @@
                 <RadioButton ToolTip="Transparent" Click="ColorButton_Click" Tag="7">
                     <Rectangle Width="10" Height="10" Fill="Black"/>
                 </RadioButton>
+                -->  
+                
 
 
             </ToolBar>
@@ -138,20 +174,20 @@
                             <Label DockPanel.Dock="Left" Content="当前对象："></Label>
                             <Label x:Name="lbl_currctrl" DockPanel.Dock="Left">
                             </Label>
-                        
+
                         </DockPanel>
                         <ComboBox x:Name="cmb_allc" DisplayMemberPath="Parent.PropDispName"  SelectedItem="{Binding SelectedJWCControl.Name}" SelectionChanged="cmb_allc_SelectionChanged" FontSize="12">
                             <ComboBox.ItemContainerStyle>
                                 <Style TargetType="{x:Type ComboBoxItem}">
                                     <Setter Property="Template" Value="{StaticResource DetailedTemplate}" />
-                                    
+
                                 </Style>
                             </ComboBox.ItemContainerStyle>
                         </ComboBox>
 
                         <Separator/>
                         <StackPanel x:Name="pan_prop">
-                            
+
 
                         </StackPanel>
 

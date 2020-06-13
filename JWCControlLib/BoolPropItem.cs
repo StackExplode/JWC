@@ -18,7 +18,7 @@ namespace JWCControlLib
         protected bool _OldValue;
 
 
-        public BoolPropItem(JWCControl jc, PropertyInfo pi,PropDiscribeAttribute attr)
+        public BoolPropItem(IPropGWAble jc, PropertyInfo pi, PropDiscribeAttribute attr)
         {
             _Ctrl = jc;
             _PI = pi;

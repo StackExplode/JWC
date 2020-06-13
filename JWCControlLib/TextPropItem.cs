@@ -17,7 +17,7 @@ namespace JWCControlLib
         public override event Action<string> TimeToShowHelpString;
         protected string _OldValue;
         protected TextBox _Txtbox;
-        public TextPropItem(JWCControl jc,PropertyInfo pi,PropDiscribeAttribute attr)
+        public TextPropItem(IPropGWAble jc, PropertyInfo pi, PropDiscribeAttribute attr)
         {
             _Ctrl = jc;
             _PI = pi;
@@ -41,11 +41,13 @@ namespace JWCControlLib
             dp.Children.Add(_Txtbox);
             DockPanel.SetDock(lbl, Dock.Left);
             DockPanel.SetDock(_Txtbox, Dock.Left);
+            _Txtbox.TextWrapping = TextWrapping.NoWrap;
             var info =  _Attr;
             
             lbl.Content = info.FriendlyName + ":";
             _HelpString = info.Describe;
-            _Txtbox.Text = _Ctrl.GetProp(_PI).ToString();
+            var pp = _Ctrl.GetProp(_PI);
+            _Txtbox.Text = pp == null ? "" : pp.ToString();
             //_Txtbox.MaxWidth = _Txtbox.ActualWidth;
             _Txtbox.LostFocus += _Txtbox_LostFocus;
             _Txtbox.GotFocus += _Txtbox_GotFocus;

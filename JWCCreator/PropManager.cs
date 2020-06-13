@@ -109,7 +109,7 @@ namespace JWCCreator
             SetSizeFun(new object[] { x, y });
         }
 
-        void itm_OnPropValueChanged(APropItem sender, JWCControl arg1, PropertyInfo arg2, object arg3)
+        void itm_OnPropValueChanged(APropItem sender, IPropGWAble arg1, PropertyInfo arg2, object arg3)
         {
             JWCControl jc = arg1 as JWCControl;
             if (jc == null)

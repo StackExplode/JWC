@@ -1,0 +1,24 @@
+﻿<Window x:Class="JWCCreator.fm_about"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="关于本程序" Height="244" Width="419" WindowStartupLocation="CenterOwner" ResizeMode="NoResize">
+    <Grid Background="#FFD4D0C8">
+        <Label Content="JWC-简易厕所组态控制" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" FontSize="24" FontFamily="黑体"/>
+        <Label Content="JWC Creator 设计器 Version" HorizontalAlignment="Left" Margin="10,52,0,0" VerticalAlignment="Top" FontSize="18"/>
+        <Label x:Name="lbl_ver" Content="0.0.0" HorizontalAlignment="Left" Margin="248,52,0,0" VerticalAlignment="Top" FontSize="18"/>
+        <Button Content="我了解了" HorizontalAlignment="Left" Margin="328,192,0,0" VerticalAlignment="Top" Width="75" Click="Button_Click"/>
+        <TextBlock FontSize="13" Margin="265,21,10,169">Designed by <Hyperlink NavigateUri="https://blog.jloli.cc" RequestNavigate="Hyperlink_RequestNavigate_2" ToolTip="作者博客">宁宁</Hyperlink></TextBlock>
+        <TextBlock FontSize="13" Margin="10,89,10,79" TextWrapping="Wrap">
+            本程序符合开源协议<Hyperlink NavigateUri="https://www.gnu.org/licenses/gpl-3.0.zh-cn.html" RequestNavigate="Hyperlink_RequestNavigate_1" ToolTip="该协议官网的原文">GUN GPL v3.0</Hyperlink>，可以被用于商业用途但对于源代码，任何人必须可以免费的获取到。一切直接和间接的对本程序的引用行为都会导致您的产品整体上被要求强制遵守该开源协议。
+        </TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="10,166,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" Height="21" Width="393" FontSize="13" Foreground="Red">
+            您在使用本软件以及其衍生软件及插件时则代表您已同意以上协议！
+        </TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="10,194,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="21" Width="313" FontSize="12" Foreground="#FF086CFB">
+            Copyleft 2020 by Jennings aka 宁宁 with GPL v3.0 License
+        </TextBlock>
+        <TextBlock HorizontalAlignment="Left" Margin="10,145,0,0" TextWrapping="Wrap"  VerticalAlignment="Top" FontSize="13" Width="393">
+            您可以从这里获取本程序及部分插件的源代码：<Hyperlink NavigateUri="https://github.com/StackExplode/JWC" RequestNavigate="Hyperlink_RequestNavigate" >Github</Hyperlink>
+        </TextBlock>
+    </Grid>
+</Window>

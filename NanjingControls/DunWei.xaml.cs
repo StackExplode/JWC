@@ -18,16 +18,17 @@ using System.IO;
 using System.Drawing.Imaging;
 using System.Reflection;
 using JWCCommunicationLib;
+using System.Collections.Concurrent;
 
 namespace NanjingControls
 {
     /// <summary>
     /// DunWei.xaml 的交互逻辑
     /// </summary>
+    [JWCControlLib.JWCControlDesc("南京蹲位","南京项目中用到对蹲位有无人员控件，使用两张图片指示状态。")]
     public partial class DunWei : JWCControlLib.JWCControl,IDataReceiver
     {
-        public  const string Fname = "WC蹲位";
-        public  const string DescribeString = "用两张图片指示两个状态的蹲位";
+
 
         protected BitmapImage UsingBitmap;
         protected BitmapImage FreeBitmap;
@@ -60,10 +61,10 @@ namespace NanjingControls
             UsingBitmap = Default_UsingImage;
             FreeBitmap = Default_FreeImage;
             IsUing = true;
+            RecID = "";
+            DunRegAddr = "1";
             //img1.Source = ToBitMapSource(Properties.Resources._58699774_p0);
         }
-
-     
 
        
 
@@ -97,8 +98,8 @@ namespace NanjingControls
             }
         }
 
-        [PropDiscribe(CreatorPropType.DialogWithText, "有人图片", "当蹲位有人时显示的图片绝对路径，留空则使用内置图片",
-           new object[] { "打开", typeof(OpenFilePropDialog), new object[] { "图片|*.jpg;*.png;*.gif;*.jpeg;*.bmp", false } })]
+        [PropDiscribe(CreatorPropType.DialogWithText, "有人图片", "当蹲位有人时显示的图片路径，留空则使用内置图片。如果路径位于本程序子目录内则保存为相对路径否则使用绝对路径",
+           new object[] { "打开", typeof(OpenFilePropDialog), new object[] { "图片|*.jpg;*.png;*.gif;*.jpeg;*.bmp", false ,true} })]
         [Outputable]
         public string UsingImage
         {
@@ -109,12 +110,13 @@ namespace NanjingControls
                 if (value == String.Empty)
                     UsingBitmap = Default_UsingImage;
                 else
-                    UsingBitmap = new BitmapImage(new Uri(@"file:///"+value));
+                    UsingBitmap = new BitmapImage(new Uri(@"file:///" + System.IO.Path.GetFullPath(value)));
+                IsUing = IsUing;
             }
         }
 
-        [PropDiscribe(CreatorPropType.DialogWithText, "无人图片", "当蹲位无人时显示的图片绝对路径，留空则使用内置图片",
-             new object[] { "打开", typeof(OpenFilePropDialog), new object[] { "图片|*.jpg;*.png;*.gif;*.jpeg;*.bmp", false } })]
+        [PropDiscribe(CreatorPropType.DialogWithText, "无人图片", "当蹲位无人时显示的图片路径，留空则使用内置图片。如果路径位于本程序子目录内则保存为相对路径否则使用绝对路径",
+             new object[] { "打开", typeof(OpenFilePropDialog), new object[] { "图片|*.jpg;*.png;*.gif;*.jpeg;*.bmp", false,true } })]
         [Outputable]
         public string FreeImage
         {
@@ -129,17 +131,11 @@ namespace NanjingControls
             }
         }
 
+        [PropDiscribe(CreatorPropType.Text, "蹲位寄存器地址", "设置通信中蹲位对应的寄存器地址")]
+        [Outputable]
+        public string DunRegAddr { get; set; }
 
-        public void SetControlState(CommunicationType type,object obj)
-        {
-            if (type.HasFlag(CommunicationType.Boolean))
-            {
-                bool b = (bool)obj;
-                this.IsUing = b;
-            }
-        }
-
-        [PropDiscribe( CreatorPropType.Text,"发送ID","身为发送者的ID")]
+        [PropDiscribe( CreatorPropType.Text,"接收ID","身为接收者的ID")]
         [Outputable]
         public string RecID
         {
@@ -148,14 +144,26 @@ namespace NanjingControls
         }
 
 
-        CommunicationType IDataCommunicator.ComType
+
+
+
+        public void SetRegister(string key, object data)
         {
-            get { return CommunicationType.Boolean; }
+            if(key == DunRegAddr)
+            {
+                IsUing = (bool)data;
+            }
         }
 
-        public Guid CustomTypeUID
+
+
+        public event Action<object, string> OnRequestRegister;
+
+        public RegisterType GetRegisterType(string key)
         {
-            get { throw new NotImplementedException(); }
+            if (key == DunRegAddr)
+                return RegisterType.Boolean;
+            return RegisterType.Undefined;
         }
     }
 }
