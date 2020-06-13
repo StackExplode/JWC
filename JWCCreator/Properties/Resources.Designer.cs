@@ -353,6 +353,16 @@ namespace JWCCreator.Properties {
         /// <summary>
         ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
         /// </summary>
+        internal static System.Drawing.Icon wc_64px_1226682_easyicon_net {
+            get {
+                object obj = ResourceManager.GetObject("wc_64px_1226682_easyicon_net", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似于 (图标) 的 System.Drawing.Icon 类型的本地化资源。
+        /// </summary>
         internal static System.Drawing.Icon wmsui32_EXCLAMATION {
             get {
                 object obj = ResourceManager.GetObject("wmsui32_EXCLAMATION", resourceCulture);

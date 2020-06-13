@@ -1,7 +1,7 @@
 ﻿<Window x:Class="JWC.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="JWC" Height="350" Width="525" WindowStyle="None" Loaded="Window_Loaded" ResizeMode="NoResize">
+        Title="JWC" Height="350" Width="525" WindowStyle="None" Loaded="Window_Loaded" ResizeMode="NoResize" Icon="pack://application:,,,/JWC;Component/Resources/wc_64px_1226752_easyicon.net.ico">
     <Window.Resources>
         <RoutedUICommand x:Key="zoomincmd"></RoutedUICommand>
     </Window.Resources>

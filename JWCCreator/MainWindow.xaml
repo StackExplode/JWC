@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:jcl="clr-namespace:JWCControlLib;assembly=JWCControlLib"
         xmlns:System="clr-namespace:System;assembly=mscorlib" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" x:Name="JWCCMainWindow" x:Class="JWCCreator.MainWindow"
-        Title="JWC Creator" Height="703" Width="1260" Loaded="JWCCMainWindow_Loaded" WindowStyle="ThreeDBorderWindow" MinHeight="355" MinWidth="630">
+        Title="JWC Creator" Height="703" Width="1260" Loaded="JWCCMainWindow_Loaded" WindowStyle="ThreeDBorderWindow" MinHeight="355" MinWidth="630" Icon="pack://application:,,,/JWCCreator;Component/Resources/wc_64px_1226682_easyicon.net.ico">
 
     <Window.Resources>
         <RoutedUICommand x:Key="zoomincmd"></RoutedUICommand>
