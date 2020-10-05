@@ -24,8 +24,8 @@ namespace JWCCreator
     /// </summary>
     public partial class MainWindow : Window
     {
-        Stage stage;
-        PropManager pm;
+        private readonly Stage stage;
+        private readonly PropManager pm;
 
         JControlOutputData Communicator_Data = null;
         JControlOutputData Adapter_Data = null;
@@ -99,7 +99,6 @@ namespace JWCCreator
             JWCControlFactory.LoadLibs(AppDomain.CurrentDomain.BaseDirectory + "\\Controls");
             JWCCommunicationLib.JWCCommunicatorFactory.LoadLibs(AppDomain.CurrentDomain.BaseDirectory + "\\Communicators");
         }
-
 
         byte[] tempdata;
         XXControl tempxx;

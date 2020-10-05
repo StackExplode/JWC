@@ -31,6 +31,7 @@ namespace JWCCommunicationLib
             }
             else
                 pi.SetValue(this, val, null);
+            
         }
 
         public object GetProp(PropertyInfo pi)
